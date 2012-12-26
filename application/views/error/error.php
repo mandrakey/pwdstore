@@ -1,11 +1,10 @@
-<?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
-
+<?php
 /* *****************************************************************************
- * Index page controller.
+ * Standard error template.
  * 
  * =============================================================================
  * 
- * THIS FILE IS PART OF BLEUELMEDIA PWDSTORE
+ * THIS FILE IS PART OF BLEUELMEDIA SIMPLE BANKING
  * (C)2012 bleuelmedia.com
  * 
  * This program is free software; you can redistribute it and/or modify it under
@@ -22,21 +21,8 @@
  * Software Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
  * 02110-1301 USA.
  * ****************************************************************************/
+?>
 
-class Welcome extends CI_Controller {
-
-	/**
-	 * Show a welcome page.
-     */
-	public function index()
-	{
-            $auth = AuthHelper::getInstance();
-            if (!$auth->isLoggedIn())
-                redirect("login");
-            else 
-                redirect("secrets");
-	}
-}
-
-/* End of file welcome.php */
-/* Location: ./application/controllers/welcome.php */
+<h1>Hoppla, es gibt ein Problem...</h1>
+<p><strong><?=$title?></strong><br>
+    <?=$message?></p>

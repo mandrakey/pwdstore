@@ -1,7 +1,7 @@
 <?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 
 /* *****************************************************************************
- * Index page controller.
+ * Common functions library.
  * 
  * =============================================================================
  * 
@@ -23,20 +23,18 @@
  * 02110-1301 USA.
  * ****************************************************************************/
 
-class Welcome extends CI_Controller {
-
-	/**
-	 * Show a welcome page.
-     */
-	public function index()
-	{
-            $auth = AuthHelper::getInstance();
-            if (!$auth->isLoggedIn())
-                redirect("login");
-            else 
-                redirect("secrets");
-	}
+/**
+ * Check wether a given value is a valid number for account balance etc...
+ * Correct values means something like
+ * - greater or equal to 0.01
+ * - MAY contain up to two digits after comma
+ * @param float v Value to check
+ * @retval bool If the value is valid or not
+ */
+function isValidMoneyValue($v)
+{
+    $correctAmount = "/^([1-9]{1}[0-9]*([\.,]?[0-9]{1,2})?$)|(^0[\.,][0-9]{1,2}$)/";
+    return (!preg_match($correctAmount, $v) || floatval($v) == 0) ? false : true;
 }
 
-/* End of file welcome.php */
-/* Location: ./application/controllers/welcome.php */
+/* End of file */

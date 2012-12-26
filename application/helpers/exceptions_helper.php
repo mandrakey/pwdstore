@@ -1,7 +1,7 @@
 <?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 
 /* *****************************************************************************
- * Index page controller.
+ * Exception library.
  * 
  * =============================================================================
  * 
@@ -23,20 +23,16 @@
  * 02110-1301 USA.
  * ****************************************************************************/
 
-class Welcome extends CI_Controller {
-
-	/**
-	 * Show a welcome page.
-     */
-	public function index()
-	{
-            $auth = AuthHelper::getInstance();
-            if (!$auth->isLoggedIn())
-                redirect("login");
-            else 
-                redirect("secrets");
-	}
+class UserCredentialException extends Exception
+{
+    public $type;
+    
+    public function __construct($type, $message)
+    {
+        parent::__construct($message);
+        
+        $this->type = $type;
+    }
 }
 
-/* End of file welcome.php */
-/* Location: ./application/controllers/welcome.php */
+/* End of file */
