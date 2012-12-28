@@ -1,7 +1,7 @@
 <?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 
 /* *****************************************************************************
- * German error language file.
+ * German common language file.
  * 
  * =============================================================================
  * 
@@ -23,11 +23,39 @@
  * 02110-1301 USA.
  * ****************************************************************************/
 
-$lang["error_FailedToLoadData"] = "Daten konnten nicht geladen werden";
-$lang["error_PleaseCheckFollowingInput"] = "Bitte überprüfen Sie folgende Eingaben";
-$lang["error_ParameterError"] = "Parameterfehler";
-$lang["error_DataUpdateFailed"] = "Aktualisieren der Daten fehlgeschlagen";
-$lang["error_FailedToCreateRecord"] = "Es konnte kein neuer Datensatz erzeugt werden";
-$lang["error_FailedToDeleteRecord"] = "Der Datensatz konnte nicht gelöscht werden";
+//----
+// Date values
+$lang["common_DATE_YMDHIS"] = "d.m.Y, H:i:s";
+$lang["common_DATE_YMDHI"] = "d.m.Y, H:i";
+$lang["common_DATE_YMD"] = "d.m.Y";
 
-$lang["error_IllegalValueForField"] = "Ungültiger Wert '{value}' für das Feld {field}";
+//----
+// Navigation buttons
+$lang["navigation_Home"] = "Startseite";
+$lang["navigation_Settings"] = "Einstellungen";
+$lang["navigation_NewEntry"] = "Neuer Eintrag";
+$lang["navigation_Logout"] = "Logout";
+$lang["navigation_ManageUsers"] = "Benutzer verwalten";
+$lang["navigation_ManageCategories"] = "Kategorien verwalten";
+
+//----
+// Actions
+$lang["common_Save"] = "Speichern";
+$lang["common_Abort"] = "Abbrechen";
+$lang["common_Back"] = "Zurück";
+$lang["common_Edit"] = "Bearbeiten";
+$lang["common_Delete"] = "Löschen";
+$lang["common_Yes"] = "Ja";
+$lang["common_No"] = "Nein";
+
+//----
+// Dialog texts
+$lang["dialog_FurtherActions"] = "Weitere Aktionen";
+$lang["dialog_BackTo"] = "Zurück zu(r)";
+
+//----
+// Login dialog
+$lang["login_EnterUserData"] = "Benutzerdaten eingeben";
+$lang["login_Username"] = "Benutzername";
+$lang["login_Password"] = "Passwort";
+$lang["login_Login"] = "Einloggen";

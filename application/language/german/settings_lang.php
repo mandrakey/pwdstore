@@ -1,7 +1,7 @@
 <?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 
 /* *****************************************************************************
- * German error language file.
+ * German settings language file.
  * 
  * =============================================================================
  * 
@@ -23,11 +23,16 @@
  * 02110-1301 USA.
  * ****************************************************************************/
 
-$lang["error_FailedToLoadData"] = "Daten konnten nicht geladen werden";
-$lang["error_PleaseCheckFollowingInput"] = "Bitte überprüfen Sie folgende Eingaben";
-$lang["error_ParameterError"] = "Parameterfehler";
-$lang["error_DataUpdateFailed"] = "Aktualisieren der Daten fehlgeschlagen";
-$lang["error_FailedToCreateRecord"] = "Es konnte kein neuer Datensatz erzeugt werden";
-$lang["error_FailedToDeleteRecord"] = "Der Datensatz konnte nicht gelöscht werden";
+//$lang["settings_"] = "";
+$lang["settings_Settings"] = "Einstellungen";
+$lang["settings_SettingsFor"] = "Einstellungen für {user_name}";
+$lang["settings_Username"] = "Benutzername";
+$lang["settings_EMail"] = "E-Mail";
+$lang["settings_Password"] = "Passwort";
+$lang["settings_ChangePassword"] = "Passwort ändern";
+$lang["settings_NewPassword"] = "Neues Passwort";
+$lang["settings_ConfirmNewPassword"] = "Bestätigen";
+$lang["settings_NewPasswordDoesNotMatch"] = "Das eingegebene neue Passwort stimmt nicht mit seiner Bestätigung überein.";
 
-$lang["error_IllegalValueForField"] = "Ungültiger Wert '{value}' für das Feld {field}";
+$lang["settings_SettingsUpdated_Title"] = "Einstellungen gespeichert";
+$lang["settings_SettingsUpdated_Message"] = "Ihre neuen Einstellungen wurden erfolgreich gespeichert.";
