@@ -1,7 +1,7 @@
 <?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 
 /* *****************************************************************************
- * Main login controller.
+ * Main settings controller.
  * 
  * =============================================================================
  * 
@@ -31,39 +31,40 @@
 class Settings extends CI_Controller
 {
     
+    private $auth;
+    private $tpl;
+    
+    public function __construct()
+    {
+        parent::__construct();
+        
+        $this->auth = AuthHelper::getInstance();
+        $this->tpl = Template::getInstance();
+        if (!$this->auth->isLoggedIn()) {
+            redirect("login");
+            return;
+        }
+        
+        $this->lang->load("settings");
+    }
+    
     /**
      * Display current profile settings.
      */
     public function index()
     {
-        if (!AuthHelper::getInstance()->isLoggedIn()) {
-            redirect(site_url("login"));
-            return;
-        }
-        
-        $tpl = Template::getInstance();
-        $tpl->js("settings");
-        $tpl->display("settings");
+        $this->tpl->js("settings");
+        $this->tpl->display("settings");
     }
     
     public function save()
-    {
-        if (!AuthHelper::getInstance()->isLoggedIn()) {
-            redirect(site_url("login"));
-            return;
-        }
-        
-        $tpl = Template::getInstance();
-        $tpl->js("settings");
-        
+    {   
         //----
         // Get user dataset
         $this->load->model("users_model");
         
-        $user = $this->input->post("userid");
+        $userId = $this->input->post("userId");
         $data = array(
-            "firstname" => $this->input->post("firstname"),
-            "lastname" => $this->input->post("lastname"),
             "email" => $this->input->post("email")
         );
         
@@ -73,9 +74,9 @@ class Settings extends CI_Controller
         $newPasswordConfirmation = $this->input->post("newPasswordConfirmation");
         if ($newPassword) {
             if (!$newPasswordConfirmation || $newPassword !== $newPasswordConfirmation) {
-                $tpl->set("title", "Neues Passwort");
-                $tpl->set("message", "Die neuen Passwörter stimmen nicht überein.");
-                $tpl->display("error/error");
+                $this->tpl->set("title", lang("settings_NewPassword"));
+                $this->tpl->set("message", lang("settings_NewPasswordDoesNotMatch"));
+                $this->tpl->display("error/error");
                 return;
             }
             
@@ -84,23 +85,28 @@ class Settings extends CI_Controller
         
         //----
         // Update data
+        $this->db->trans_begin();
+        
         try {
-            $this->users_model->updateUser($user, $data);
+            $this->users_model->updateUser($userId, $data);
         } catch (Exception $e) {
-            $tpl->set("title", "Beim Speichern trat ein Fehler auf");
-            $tpl->set("message", $e->getMessage());
-            $tpl->display("error/error");
+            $this->tpl->set("title", lang("error_DataUpdateFailed"));
+            $this->tpl->set("message", $e->getMessage());
+            $this->tpl->display("error/error");
             return;
         }
         
+        $this->db->trans_commit();
+        
         //----
         // Show success message
-        $tpl->set("title", "Gespeichert!");
-        $tpl->set("message", "Die geänderten Daten wurden übernommen.<br><br>"
-            ."<b>Weiteres vorgehen:</b><br>"
-            ."<a href=\"".site_url("settings")."\">Zurück zu Einstellungen</a><br>"
-            ."<a href=\"".site_url("")."\">Zurück zur Startseite</a>");
-        $tpl->display("message");
+        $this->tpl->set("title", lang("settings_SettingsUpdated_Title"));
+        $this->tpl->set("message", lang("settings_SettingsUpdated_Message")
+            ."<br><br><b>".lang("dialog_FurtherActions")."</b><br>"
+            ."- <a href=\"".site_url("settings")."\">"
+            .lang("dialog_BackTo")." ".lang("settings_Settings")."</a><br>"
+            ."- <a href=\"".site_url("")."\">".lang("dialog_BackTo")." ".lang("navigation_Home")."</a>");
+        $this->tpl->display("message");
     }
     
 }

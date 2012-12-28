@@ -1,7 +1,5 @@
-<?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
-
 /* *****************************************************************************
- * Common language file.
+ * JavaScript functions for settings controller.
  * 
  * =============================================================================
  * 
@@ -23,32 +21,12 @@
  * 02110-1301 USA.
  * ****************************************************************************/
 
-//----
-// Date values
-$lang["common_DATE_YMDHIS"] = "Y/m/d, H:i:s";
-$lang["common_DATE_YMDHI"] = "Y/m/d, H:i";
-$lang["common_DATE_YMD"] = "Y/m/d";
+/**
+ * Display the "new password" input boxes.
+ */
+function showEditPassword()
+{
+    $('#link_newPassword').hide();
+    $('#settings_newPassword').show();
+}
 
-//----
-// Navigation buttons
-$lang["navigation_Home"] = "Home";
-$lang["navigation_Settings"] = "Settings";
-$lang["navigation_NewEntry"] = "New Entry";
-$lang["navigation_Logout"] = "Logout";
-$lang["navigation_ManageUsers"] = "Manage users";
-$lang["navigation_ManageCategories"] = "Manage categories";
-
-//----
-// Actions
-$lang["common_Save"] = "Save";
-$lang["common_Abort"] = "Abort";
-$lang["common_Back"] = "Back";
-$lang["common_Edit"] = "Edit";
-$lang["common_Delete"] = "Delete";
-$lang["common_Yes"] = "Yes";
-$lang["common_No"] = "No";
-
-//----
-// Dialog texts
-$lang["dialog_FurtherActions"] = "Further actions";
-$lang["dialog_BackTo"] = "Back to";

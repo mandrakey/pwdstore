@@ -1,7 +1,7 @@
 <?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 
 /* *****************************************************************************
- * Common language file.
+ * Main settings language file.
  * 
  * =============================================================================
  * 
@@ -23,32 +23,16 @@
  * 02110-1301 USA.
  * ****************************************************************************/
 
-//----
-// Date values
-$lang["common_DATE_YMDHIS"] = "Y/m/d, H:i:s";
-$lang["common_DATE_YMDHI"] = "Y/m/d, H:i";
-$lang["common_DATE_YMD"] = "Y/m/d";
+//$lang["settings_"] = "";
+$lang["settings_Settings"] = "Settings";
+$lang["settings_SettingsFor"] = "Settings for {user_name}";
+$lang["settings_Username"] = "Username";
+$lang["settings_EMail"] = "E-Mail";
+$lang["settings_Password"] = "Password";
+$lang["settings_ChangePassword"] = "Change password";
+$lang["settings_NewPassword"] = "New Password";
+$lang["settings_ConfirmNewPassword"] = "Confirm";
+$lang["settings_NewPasswordDoesNotMatch"] = "The entered new password does not match it's confirmation.";
 
-//----
-// Navigation buttons
-$lang["navigation_Home"] = "Home";
-$lang["navigation_Settings"] = "Settings";
-$lang["navigation_NewEntry"] = "New Entry";
-$lang["navigation_Logout"] = "Logout";
-$lang["navigation_ManageUsers"] = "Manage users";
-$lang["navigation_ManageCategories"] = "Manage categories";
-
-//----
-// Actions
-$lang["common_Save"] = "Save";
-$lang["common_Abort"] = "Abort";
-$lang["common_Back"] = "Back";
-$lang["common_Edit"] = "Edit";
-$lang["common_Delete"] = "Delete";
-$lang["common_Yes"] = "Yes";
-$lang["common_No"] = "No";
-
-//----
-// Dialog texts
-$lang["dialog_FurtherActions"] = "Further actions";
-$lang["dialog_BackTo"] = "Back to";
+$lang["settings_SettingsUpdated_Title"] = "Settings update complete";
+$lang["settings_SettingsUpdated_Message"] = "The new user settings have been saved successfully.";
