@@ -52,6 +52,11 @@ function plang($languageKey, array $data = array())
     return $text;
 }
 
+/**
+ * Encrypt a secret.
+ * @param string $secret
+ * @return The encrypted secret
+ */
 function encryptSecret($secret)
 {
     $auth = AuthHelper::getInstance();
@@ -63,6 +68,11 @@ function encryptSecret($secret)
     return $CI->encrypt->encode(base64_encode($secret), $key);
 }
 
+/**
+ * Decrypt an encrypted secret text.
+ * @param string $secret
+ * @return The decrypted sectet
+ */
 function decryptSecret($secret)
 {
     $auth = AuthHelper::getInstance();
