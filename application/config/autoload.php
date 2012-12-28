@@ -65,7 +65,7 @@ $autoload['libraries'] = array("database", "session");
 */
 
 $autoload['helper'] = array("exceptions", "url", "template", "auth", "model", 
-    "functions", "form");
+    "functions", "form", "language");
 
 
 /*
@@ -97,7 +97,7 @@ $autoload['config'] = array();
 |
 */
 
-$autoload['language'] = array();
+$autoload['language'] = array("error", "common");
 
 
 /*

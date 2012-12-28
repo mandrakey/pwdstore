@@ -39,9 +39,11 @@ class ModelHelper
      * fields will be removed completely.
      * @param array $dataset Dataset from database or user input
      * @param array $fields Names of fields that may exist
+     * @param bool $deleteUnwanted If true, fields not mentioned in the fields 
+     * list will be removed automatically. Defaults to true.
      * @return bool
      */
-    public static function checkFieldset(&$dataset, $fields)
+    public static function checkFieldset(&$dataset, $fields, $deleteUnwanted = true)
     {
         if (!isset($dataset) || !is_array($dataset))
             return false;
@@ -49,9 +51,11 @@ class ModelHelper
             return false;
         
         // First, delete unwanted fields from dataset
-        foreach ($dataset as $key => $value) {
-            if (!in_array($key, $fields))
-                unset($dataset[$key]);
+        if ($deleteUnwanted) {
+            foreach ($dataset as $key => $value) {
+                if (!in_array($key, $fields))
+                    unset($dataset[$key]);
+            }
         }
         
         // Add missing fields
@@ -72,7 +76,7 @@ class ModelHelper
      * @param type $fields
      * @throws Exception
      */
-    public static function checkNecessaryFields(&$dataset, $necessaryFields, $fields = null)
+    public static function checkNecessaryFields(&$dataset, $necessaryFields, $fields = null, $deleteUnwanted = true)
     {
         if (!isset($dataset) || !is_array($dataset))
             throw new Exception("ModelHelper.checkNecessaryFields: Illegal value '"
@@ -87,7 +91,7 @@ class ModelHelper
         
         // First make sure no unwanted fields exist / all possible fields 
         // are present
-        if (is_array($fields) && !self::checkFieldset($dataset, $fields))
+        if (is_array($fields) && !self::checkFieldset($dataset, $fields, $deleteUnwanted))
             throw new Exception("ModelHelper.checkNecessaryFields: Failed to "
                 ."check existing fields in data model.");
         
@@ -98,7 +102,7 @@ class ModelHelper
                 $missing[] = "- ".$key;
         
         if (count($missing) > 0)
-            throw new Exception("Bitte prüfen Sie folgende Angaben:<br>"
+            throw new Exception(lang("error_PleaseCheckFollowingInput").":<br>"
                 .implode("<br>", $missing));
     }
     

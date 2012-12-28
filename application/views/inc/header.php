@@ -20,18 +20,17 @@
     <div id="document">
         <div id="navigation">
             
-            <a href="<?=site_url("")?>">Startseite</a>
+            <a href="<?=site_url("")?>"><?=lang("navigation_Home")?></a>
             <? if (AuthHelper::getInstance()->isLoggedIn()): ?>
-            <a href="<?=site_url("settings")?>">Einstellungen</a>
-            <a href="<?=site_url("secrets/new")?>">Neuer Eintrag</a>
+            <a href="<?=site_url("settings")?>"><?=lang("navigation_Settings")?></a>
+            <a href="<?=site_url("secrets/new")?>"><?=lang("navigation_NewEntry")?></a>
             
-            <a href="<?=site_url("login/logout")?>">Logout</a>
+            <a href="<?=site_url("login/logout")?>"><?=lang("navigation_Logout")?></a>
             <? endif; ?>
             
             <? if (isset($user["level"]) && $user["level"] == "0"): ?>
             <br>
-            <a href="<?=site_url("users")?>">Benutzerverwaltung</a>
-            <a href="<?=site_url("accounts")?>">Kontenverwaltung</a>
+            <a href="<?=site_url("users")?>"><?=lang("navigation_ManageUsers")?></a>
             <? endif; ?>
         
         </div>

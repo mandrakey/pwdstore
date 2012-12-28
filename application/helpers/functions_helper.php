@@ -37,4 +37,41 @@ function isValidMoneyValue($v)
     return (!preg_match($correctAmount, $v) || floatval($v) == 0) ? false : true;
 }
 
+/**
+ * Display a language string with parameters to be replaced.
+ * @param string $languageKey Key in language file
+ * @param array $data Parameters to replace like array('parameter' => 'value'). 
+ * In the message text {parameter} will be replaced with value.
+ * @return The new text
+ */
+function plang($languageKey, array $data = array())
+{
+    $text = lang($languageKey);
+    foreach ($data as $key => $value)
+        $text = str_replace("{".$key."}", $value, $text);
+    return $text;
+}
+
+function encryptSecret($secret)
+{
+    $auth = AuthHelper::getInstance();
+    $user = $auth->getCurrentUser();
+    $key = md5($user["id"]."_".$user["name"]);
+    
+    $CI = get_instance();
+    $CI->load->library("encrypt");
+    return $CI->encrypt->encode(base64_encode($secret), $key);
+}
+
+function decryptSecret($secret)
+{
+    $auth = AuthHelper::getInstance();
+    $user = $auth->getCurrentUser();
+    $key = md5($user["id"]."_".$user["name"]);
+    
+    $CI = get_instance();
+    $CI->load->library("encrypt");
+    return base64_decode($CI->encrypt->decode($secret, $key));
+}
+
 /* End of file */
