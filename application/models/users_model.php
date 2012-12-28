@@ -36,7 +36,7 @@ class Users_model extends CI_Model
         "id", "name", "password", "email", "active", "level", "language"
     );
     private static $necessaryFields = array(
-        "id", "name", "email", "language"
+        "id", "email", "language"
     );
     
     public static function fields()
@@ -196,15 +196,16 @@ class Users_model extends CI_Model
      * @param int $user The user to update.
      * @param array $data Data to use.
      */
-    public function updateUser($user, $data)
+    public function update($user, $data)
     {
         if (!isset($user) || !is_numeric($user))
-            throw new Exception("User_model.insertUser: Illegal value '"
+            throw new Exception("User_model.update: Illegal value '"
                 .var_export($user, true)."' for field 'user'");
-        if (!isset($user) || !is_array($data))
-            throw new Exception("User_model.insertUser: Illegal value '"
+        if (!isset($data) || !is_array($data))
+            throw new Exception("User_model.update: Illegal value '"
                 .var_export($data, true)."' for field 'data'");
         
+        array_shift($data);
         $this->db->where("id", $user);
         $this->db->update("users", $data);
     }
@@ -217,7 +218,7 @@ class Users_model extends CI_Model
      * @param int $user ID of the user to delete
      * @throws Exception
      */
-    public function deleteUser($user)
+    public function delete($user)
     {
         if (!isset($user) || !is_numeric($user))
             throw new Exception("User_model.insertUser: Illegal value '"

@@ -26,6 +26,7 @@
 <?php $even = true; ?>
 
 <?=form_open("users/doEdit")?>
+<input type="hidden" name="userId" value="<?=$currentUser["id"]?>">
 <div class="form">
 <div class="header">
     <?=lang("users_EditUser")?>
@@ -35,7 +36,7 @@
     <tr>
         <td>&nbsp;</td>
         <td>
-            <input type="checkbox" name="active" value="1"<?=((intval($user["active"]) == 1) ? " checked" : "")?>> 
+            <input type="checkbox" name="active" value="1"<?=((intval($currentUser["active"]) == 1) ? " checked" : "")?>> 
             <?=lang("users_UserIsActive")?>
         </td>
     </tr>
@@ -43,18 +44,18 @@
         <td><?=lang("users_Level")?>:</td>
         <td>
             <select name="level">
-                <option value="0"<?=((intval($user["level"]) == 0) ? " selected" : "")?>><?=lang("users_Administrator")?></option>
-                <option value="1"<?=((intval($user["level"]) == 1) ? " selected" : "")?>><?=lang("users_User")?></option>
+                <option value="0"<?=((intval($currentUser["level"]) == 0) ? " selected" : "")?>><?=lang("users_Administrator")?></option>
+                <option value="1"<?=((intval($currentUser["level"]) == 1) ? " selected" : "")?>><?=lang("users_User")?></option>
             </select>
         </td>
     </tr>
     <tr>
         <td><?=lang("users_Name")?>:</td>
-        <td><input type="text" name="name" value="<?=$user["name"]?>" disabled></td>
+        <td><input type="text" name="name" value="<?=$currentUser["name"]?>" disabled></td>
     </tr>
     <tr>
         <td><?=lang("users_EMail")?>:</td>
-        <td><input type="text" name="email" value="<?=$user["email"]?>" required></td>
+        <td><input type="text" name="email" value="<?=$currentUser["email"]?>" required></td>
     </tr>
     <tr>
         <td><?=lang("users_Password")?>:</td>
@@ -72,8 +73,8 @@
         <td><?=lang("users_Language")?>:</td>
         <td>
             <select name="language">
-                <option value="english"<?=(($user["language"] == "english") ? " selected" : "")?>>English</option>
-                <option value="german"<?=(($user["language"] == "german") ? " selected" : "")?>>Deutsch</option>
+                <option value="english"<?=(($currentUser["language"] == "english") ? " selected" : "")?>>English</option>
+                <option value="german"<?=(($currentUser["language"] == "german") ? " selected" : "")?>>Deutsch</option>
             </select>
         </td>
     </tr>

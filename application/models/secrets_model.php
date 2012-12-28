@@ -199,6 +199,21 @@ class Secrets_model extends CI_Model
         $this->db->delete("secrets", array("id" => $secretId));
     }
     
+    /**
+     * Delete all existing secrets for a specified user.
+     * @param int $userId The user for which to delete all secrets
+     * @throws Exception
+     */
+    public function deleteAllForUser($userId)
+    {
+        if (!isset($userId) || !is_numeric($userId))
+            throw new Exception("Secrets_model.deleteAllForUser: Illegal value '"
+                .var_export($userId, true)."' for field 'userId'");
+        
+        // Delete all secrets
+        $this->db->delete("secrets", array("user_id" => $userId));
+    }
+    
 }
 
 /* End of file */

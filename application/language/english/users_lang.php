@@ -44,7 +44,7 @@ $lang["users_NewPassword"] = "New Password";
 $lang["users_ConfirmNewPassword"] = "Confirm";
 $lang["users_NewPasswordDoesNotMatch"] = "The entered new password does not match it's confirmation.";
 
-$lang["users_ReallyDeleteUser"] = "Shall the user #{categoryId} ({name}) really be deleted?";
+$lang["users_ReallyDeleteUser"] = "Shall the user '{name}' really be deleted?";
 
 //----
 // Table headings

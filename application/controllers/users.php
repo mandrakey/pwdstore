@@ -122,6 +122,14 @@ class Users extends CI_Controller
         $this->db->trans_commit();
         
         // Success !
+        redirect("users/doneCreate");
+    }
+    
+    /**
+     * Show success message for user creation.
+     */
+    public function doneCreate()
+    {
         $this->tpl->set("title", lang("users_UserCreated_Title"));
         $this->tpl->set("message", lang("users_UserCreated_Message")
             ."<br><br><b>".lang("dialog_FurtherActions")."</b><br>"
@@ -151,7 +159,7 @@ class Users extends CI_Controller
         try {
             $this->load->model("users_model");
             $user = $this->users_model->getUser($userId);
-            $this->tpl->set("user", $user);
+            $this->tpl->set("currentUser", $user);
         } catch (Exception $e) {
             $this->tpl->set("title", lang("error_FailedToLoadData"));
             $this->tpl->set("message", $e->getMessage());
@@ -164,38 +172,53 @@ class Users extends CI_Controller
     }
     
     /**
-     * Save changed category's data.
+     * Save changed user's data.
      */
     public function doEdit()
     {
-        return;
         //----
         // Get data from post
-        $categoryId = $this->input->post("categoryId");
-        $category = array(
-            "id" => $categoryId,
-            "name" => $this->input->post("name")
+        $userId = $this->input->post("userId");
+        if (!$userId || !is_numeric($userId)) {
+            $this->tpl->set("title", lang("error_ParameterError"));
+            $this->tpl->set("message", plang("error_IllegalValueForField", 
+                array("field" => "userId", "value" => var_export($userId, true))));
+            $this->tpl->display("error/error");
+            return;
+        }
+        
+        $user = array(
+            "id" => $userId,
+            "active" => $this->input->post("active"),
+            "level" => $this->input->post("level"),
+            "email" => $this->input->post("email"),
+            "language" => $this->input->post("language")
         );
         
         //----
-        // Check data
-        if (!$categoryId || !is_numeric($categoryId)) {
-            $this->tpl->set("title", lang("error_ParameterError"));
-            $this->tpl->set("message", plang("error_IllegalValueForField",
-                array("field" => "categoryId", "value" => var_export($categoryId, true))));
-            $this->tpl->display("error/error");
-            return;
+        // Check entered password
+        $newPassword = $this->input->post("newPassword");
+        $newPasswordConfirmation = $this->input->post("newPasswordConfirmation");
+        if (trim($newPassword) != "" || trim($newPasswordConfirmation) != "") {
+            if ($newPassword !== $newPasswordConfirmation) {
+                $this->tpl->set("title", lang("error_ParameterError"));
+                $this->tpl->set("message", lang("users_PasswordDoesNotMatchConfirmation"));
+                $this->tpl->display("error/error");
+                return;
+            }
+            
+            $user["password"] = sha1($newPassword);
         }
         
         //----
         // Save data
         $this->db->trans_begin();
-        
+
         try {
-            $this->load->model("categories_model");
-            $this->categories_model->update(intval($categoryId), $category);
+            $this->load->model("users_model");
+            $this->users_model->update($userId, $user);
         } catch (Exception $e) {
-            $this->tpl->set("title", lang("error_DataUpdateFailed"));
+            $this->tpl->set("title", lang("error_FailedToCreateRecord"));
             $this->tpl->set("message", $e->getMessage());
             $this->tpl->display("error/error");
             return;
@@ -204,36 +227,43 @@ class Users extends CI_Controller
         $this->db->trans_commit();
         
         // Success !
-        $this->tpl->set("title", lang("categories_CategoryUpdated_Title"));
-        $this->tpl->set("message", lang("categories_CategoryUpdated_Message")
+        redirect("users/doneEdit");
+    }
+    
+    /**
+     * Display success message for editing.
+     */
+    public function doneEdit()
+    {
+        $this->tpl->set("title", lang("users_UserUpdated_Title"));
+        $this->tpl->set("message", lang("users_UserUpdated_Message")
             ."<br><br><b>".lang("dialog_FurtherActions")."</b><br>"
-            ."- <a href=\"".site_url("categories")."\">"
-            .lang("dialog_BackTo")." ".lang("categories_Categories")."</a>");
+            ."- <a href=\"".site_url("users")."\">"
+            .lang("dialog_BackTo")." ".lang("users_Users")."</a>");
         $this->tpl->display("message");
     }
     
     /**
-     * Show a confirmation page: Really delete the category?
-     * @param int $categoryId The ID of the category to delete
+     * Show a confirmation page: Really delete the user?
+     * @param int $userId The ID of the user to delete
      * @return type
      */
-    public function delete($categoryId)
+    public function delete($userId)
     {
-        return;
-        if (!isset($categoryId) || !is_numeric($categoryId)) {
+        if (!isset($userId) || !is_numeric($userId)) {
             $this->tpl->set("title", lang("error_ParameterError"));
             $this->tpl->set("message", plang("error_IllegalValueForField",
-                array("field" => "categoryId", "value" => var_export($categoryId, true))));
+                array("field" => "userId", "value" => var_export($userId, true))));
             $this->tpl->display("error/error");
             return;
         }
         
         //----
-        // Get category data
+        // Get user data
         try {
-            $this->load->model("categories_model");
-            $category = $this->categories_model->get(intval($categoryId));
-            $this->tpl->set("category", $category);
+            $this->load->model("users_model");
+            $user = $this->users_model->getUser(intval($userId));
+            $this->tpl->set("currentUser", $user);
         } catch (Exception $e) {
             $this->tpl->set("title", lang("error_FailedToLoadData"));
             $this->tpl->set("message", $e->getMessage());
@@ -241,7 +271,7 @@ class Users extends CI_Controller
             return;
         }
         
-        $this->tpl->display("categories_delete");
+        $this->tpl->display("users_delete");
     }
     
     /**
@@ -249,12 +279,11 @@ class Users extends CI_Controller
      */
     public function doDelete()
     {
-        return;
-        $categoryId = $this->input->post("categoryId");
-        if (!$categoryId || !is_numeric($categoryId)) {
+        $userId = $this->input->post("userId");
+        if (!$userId || !is_numeric($userId)) {
             $this->tpl->set("title", lang("error_ParameterError"));
             $this->tpl->set("message", plang("error_IllegalValueForField", 
-                array("field" => "categoryId", "value" => var_export($categoryId, true))));
+                array("field" => "userId", "value" => var_export($userId, true))));
             $this->tpl->display("error/error");
             return;
         }
@@ -264,9 +293,12 @@ class Users extends CI_Controller
         $this->db->trans_begin();
         
         try {
-            $this->load->model("categories_model");
-            $this->categories_model->delete($categoryId);
+            $this->load->model("users_model");
+            $this->load->model("secrets_model");
+            $this->secrets_model->deleteAllForUser($userId);
+            $this->users_model->delete($userId);
         } catch (Exception $e) {
+            $this->db->trans_rollback();
             $this->tpl->set("title", lang("error_FailedToDeleteRecord"));
             $this->tpl->set("message", $e->getMessage());
             $this->tpl->display("error/error");
@@ -276,11 +308,19 @@ class Users extends CI_Controller
         $this->db->trans_commit();
         
         // Success!
-        $this->tpl->set("title", lang("categories_CategoryDeleted_Title"));
-        $this->tpl->set("message", lang("categories_CategoryDeleted_Message")
+        redirect("users/doneDelete");
+    }
+    
+    /**
+     * Show success message for deletion of user.
+     */
+    public function doneDelete()
+    {
+        $this->tpl->set("title", lang("users_UserDeleted_Title"));
+        $this->tpl->set("message", lang("users_UserDeleted_Message")
             ."<br><br><b>".lang("dialog_FurtherActions")."</b><br>"
-            ."- <a href=\"".site_url("categories")."\">"
-            .lang("dialog_BackTo")." ".lang("categories_Categories")."</a>");
+            ."- <a href=\"".site_url("users")."\">"
+            .lang("dialog_BackTo")." ".lang("users_Users")."</a>");
         $this->tpl->display("message");
     }
     
