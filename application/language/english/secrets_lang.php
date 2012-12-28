@@ -26,8 +26,17 @@
 $lang["secrets_Secrets"] = "Secrets";
 $lang["secrets_ViewSecretEntry"] = "View secret entry";
 $lang["secrets_EditSecretEntry"] = "Edit secret entry";
+$lang["secrets_CreateSecretEntry"] = "Create secret entry";
 $lang["secrets_SecretUpdated_Title"] = "Update successful.";
 $lang["secrets_SecretUpdated_Message"] = "The secret has been updated successfully.";
+$lang["secrets_SecretDeleted_Title"] = "Deletion successful";
+$lang["secrets_SecretDeleted_Message"] = "The secret has been deleted from the database.";
+$lang["secrets_SecretCreated_Title"] = "New secret created";
+$lang["secrets_SecretCreated_Message"] = "The new secret record has been created.";
+$lang["secrets_SeparatedWithCommas"] = "Separated with commas";
+$lang["secrets_TagsPLACEHOLDER"] = "tag1,tag2,tag3 ...";
+
+$lang["secrets_ReallyDeleteSecret"] = "Shall the secret #{secretId} ({description}), category \"{category}\", really be deleted?";
 
 //----
 // Table headings

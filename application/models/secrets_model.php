@@ -33,7 +33,7 @@ class Secrets_model extends CI_Model
 {
     
     private static $fields = array(
-        "id", "category", "tags", "description", "secret", "comment", "date"
+        "id", "user_id", "category", "tags", "description", "secret", "comment", "date"
     );
     private static $necessaryFields = array(
         "id", "category", "date"
@@ -81,9 +81,31 @@ class Secrets_model extends CI_Model
     }
     
     /**
+     * Retrieve minimal details for a given secret.
+     * Gets secret's ID, description and category.
+     * @param int $secretId ID of the secret to retrieve.
+     * @throws Exception
+     */
+    public function getMinimal($secretId)
+    {
+        if (!isset($secretId) || !is_numeric($secretId))
+            throw new Exception("Secrets_model.getDetails: Illegal value '"
+                .var_export($secretId, true)."' for field 'secretId'.");
+        
+        $this->db->select("s.id, s.description, s.category, c.name AS category_name");
+        $this->db->join("categories AS c", "s.category = c.id");
+        $res = $this->db->get_where("secrets AS s", array("s.id" => $secretId));
+        
+        if (!$res || $res->num_rows() == 0)
+            throw new Exception("Secrets_model.getDetails: The requested secret "
+                ."coult not be found.");
+        
+        return $res->row_array();
+    }
+    
+    /**
      * Retrieve all details about one specific secret.
      * @param int $secretId ID of the secret to retrieve.
-     * @retval array Secret data
      * @throws Exception
      */
     public function getDetails($secretId)
@@ -105,6 +127,42 @@ class Secrets_model extends CI_Model
     
     //==========================================================================
     // INSERT
+    
+    /**
+     * Insert a new secret record into database.
+     * @param array $secret Secret data to be saved. The real "secret" field 
+     * will be encrypted before saving.
+     * @retval int The new secret record's ID
+     * @throws Exception
+     */
+    public function insert(array $secret)
+    {
+        $secretId = null;
+        try {
+            ModelHelper::checkNecessaryFields($secret, self::$necessaryFields, self::$fields);
+            array_shift($secret);
+            
+            $secret["secret"] = encryptSecret($secret["secret"]);
+            $this->db->insert("secrets", $secret);
+            
+            //----
+            // Retrieve new ID
+            $this->db->select("id");
+            $this->db->where(array("user_id" => $secret["user_id"], "date" => $secret["date"]));
+            $res = $this->db->get("secrets");
+            
+            if ($res->num_rows == 0) {
+                $this->db->trans_rollback();
+                throw new Exception("Secrets_model.insert: Failed to retrieve "
+                    ."new secret's ID");
+            }
+            
+            $row = $res->row_array();
+            $secretId = $row["id"];
+        } catch (Exception $e) { throw $e; }
+        
+        return $secretId;
+    }
     
     //==========================================================================
     // UPDATE
@@ -130,6 +188,16 @@ class Secrets_model extends CI_Model
     
     //==========================================================================
     // DELETE
+    
+    public function delete($secretId)
+    {
+        if (!isset($secretId) || !is_numeric($secretId))
+            throw new Exception("Secrets_model.delete: Illegal value '"
+                .var_export($secretId, true)."' for field 'secretId'");
+        
+        // Delete the secret
+        $this->db->delete("secrets", array("id" => $secretId));
+    }
     
 }
 

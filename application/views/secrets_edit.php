@@ -49,6 +49,11 @@
         <td><input type="text" name="description" value="<?=$secret["description"]?>"></td>
     </tr>
     <tr>
+        <td><?=lang("secrets_Tags")?>:<br>
+            <span class="note"><?=lang("secrets_SeparatedWithCommas")?></span></td>
+        <td><input type="text" name="tags" value="<?=$secret["tags"]?>"></td>
+    </tr>
+    <tr>
         <td><?=lang("secrets_Secret")?>:</td>
         <td><textarea name="secret"><?=decryptSecret($secret["secret"])?></textarea></td>
     </tr>

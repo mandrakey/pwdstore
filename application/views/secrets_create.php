@@ -1,6 +1,6 @@
 <?php
 /* *****************************************************************************
- * Secrets detail view page.
+ * Create a new secret page.
  * 
  * =============================================================================
  * 
@@ -25,33 +25,47 @@
 
 <?php $even = true; ?>
 
+<?=form_open("secrets/doCreate")?>
 <div class="form">
 <div class="header">
-    <?=lang("secrets_ViewSecretEntry")?>
+    <?=lang("secrets_CreateSecretEntry")?>
 </div>
 <div class="body">
     <table style="width: 100%;">
     <tr>
         <td><?=lang("secrets_Category")?>:</td>
-        <td><?=$secret["category_name"]?></td>
+        <td>
+            <select name="category">
+                <? foreach ($categories as $category): ?>
+                <option 
+                    value="<?=$category["id"]?>"><?=$category["name"]?></option>
+                <? endforeach; ?>
+            </select></td>
     </tr>
     <tr>
         <td><?=lang("secrets_Description")?>:</td>
-        <td><?=$secret["description"]?></td>
+        <td><input type="text" name="description"></td>
+    </tr>
+    <tr>
+        <td><?=lang("secrets_Tags")?>:<br>
+            <span class="note"><?=lang("secrets_SeparatedWithCommas")?></span></td>
+        <td><input type="text" name="tags" placeholder="<?=lang("secrets_TagsPLACEHOLDER")?>"></td>
     </tr>
     <tr>
         <td><?=lang("secrets_Secret")?>:</td>
-        <td><?=decryptSecret($secret["secret"])?></td>
+        <td><textarea name="secret"></textarea></td>
     </tr>
     <tr>
         <td><?=lang("secrets_Comment")?>:</td>
-        <td><?=$secret["comment"]?></td>
+        <td><textarea name="comment"></textarea></td>
     </tr>
     <tr>
         <td>&nbsp;</td>
         <td>
+            <input type="submit" value="Speichern">
             <input type="button" value="Zurück" onclick="document.location.href='<?=site_url("secrets")?>';">
         </td>
     </tr>
     </table>
 </div></div>
+</form>

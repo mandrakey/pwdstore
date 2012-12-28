@@ -27,5 +27,6 @@ $lang["error_FailedToLoadData"] = "Failed to load data.";
 $lang["error_PleaseCheckFollowingInput"] = "Please check the following input";
 $lang["error_ParameterError"] = "Parameter error";
 $lang["error_DataUpdateFailed"] = "Data update failed";
+$lang["error_FailedToDeleteRecord"] = "Failed to delete the record";
 
 $lang["error_IllegalValueForField"] = "Illegal value '{value}' for field {field}";

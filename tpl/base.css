@@ -53,6 +53,9 @@ input[type=submit] {
     padding: 5px;
     cursor: pointer;
 }
+input:-moz-placeholder { color: #999; }
+input:-ms-input-placeholder { color: #999; }
+input:-webkit-input-placeholder { color: #999; }
 
 span.trans_in {
     color: #000;
@@ -60,6 +63,11 @@ span.trans_in {
 
 span.trans_out {
     color: #990000;
+}
+
+span.note {
+    font-size: 10pt;
+    color: #777;
 }
 
 /* *****************************************************************************
