@@ -1,11 +1,10 @@
-<?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
-
+<?php
 /* *****************************************************************************
- * Main error language file.
+ * Create a new category page.
  * 
  * =============================================================================
  * 
- * THIS FILE IS PART OF BLEUELMEDIA PWDSTORE
+ * THIS FILE IS PART OF BLEUELMEDIA SIMPLE BANKING
  * (C)2012 bleuelmedia.com
  * 
  * This program is free software; you can redistribute it and/or modify it under
@@ -22,12 +21,28 @@
  * Software Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
  * 02110-1301 USA.
  * ****************************************************************************/
+?>
 
-$lang["error_FailedToLoadData"] = "Failed to load data.";
-$lang["error_PleaseCheckFollowingInput"] = "Please check the following input";
-$lang["error_ParameterError"] = "Parameter error";
-$lang["error_DataUpdateFailed"] = "Data update failed";
-$lang["error_FailedToCreateRecord"] = "Failed to create new record";
-$lang["error_FailedToDeleteRecord"] = "Failed to delete the record";
+<?php $even = true; ?>
 
-$lang["error_IllegalValueForField"] = "Illegal value '{value}' for field {field}";
+<?=form_open("categories/doCreate")?>
+<div class="form">
+<div class="header">
+    <?=lang("categories_CreateCategory")?>
+</div>
+<div class="body">
+    <table style="width: 100%;">
+    <tr>
+        <td><?=lang("categories_Name")?>:</td>
+        <td><input type="text" name="name"></td>
+    </tr>
+    <tr>
+        <td>&nbsp;</td>
+        <td>
+            <input type="submit" value="Speichern">
+            <input type="button" value="Zurück" onclick="document.location.href='<?=site_url("categories")?>';">
+        </td>
+    </tr>
+    </table>
+</div></div>
+</form>

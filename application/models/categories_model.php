@@ -74,14 +74,76 @@ class Categories_model extends CI_Model
         return $categories;
     }
     
+    /**
+     * Retrieve one specified category from database.
+     * @param int $categoryId
+     * @retval array The category data
+     * @throws Exception
+     */
+    public function get($categoryId)
+    {
+        if (!isset($categoryId) || !is_numeric($categoryId))
+            throw new Exception("Categories_model.get: Illegal value '"
+                .$categoryId."' for field 'categoryId'");
+        
+        $res = $this->db->get_where("categories", array("id" => $categoryId));
+        if (!$res || $res->num_rows() == 0)
+            throw new Exception("Categories_model.get: The requested category "
+                ."could not be found");
+        
+        return $res->row_array();
+    }
+    
     //==========================================================================
     // INSERT
+    
+    /**
+     * Insert a new category record into database.
+     * @param array $category Category data to insert
+     * @throws Exception
+     */
+    public function insert(array $category)
+    {
+        try {
+            ModelHelper::checkNecessaryFields($category, self::$necessaryFields, self::$fields);
+            array_shift($category);
+            $this->db->insert("categories", $category);
+        } catch (Exception $e) { throw $e; }
+    }
     
     //==========================================================================
     // UPDATE
     
+    /**
+     * Update an existing category record.
+     * @param int $categoryId
+     * @param array $category
+     */
+    public function update($categoryId, array $category)
+    {
+        ModelHelper::checkNecessaryFields($category, self::$necessaryFields, self::$fields);
+        array_shift($category);
+        
+        $this->db->where("id", $categoryId);
+        $this->db->update("categories", $category);
+    }
+    
     //==========================================================================
     // DELETE
+    
+    /**
+     * Delete a specified category from database.
+     * @param int $categoryId
+     * @throws Exception
+     */
+    public function delete($categoryId)
+    {
+        if (!isset($categoryId) || !is_numeric($categoryId))
+            throw new Exception("Categories_model.delete: Illegal value '"
+                .var_export($categoryId, true)."' for field 'categoryId'");
+        
+        $this->db->delete("categories", array("id" => $categoryId));
+    }
     
 }
 

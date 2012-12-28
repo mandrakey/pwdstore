@@ -1,11 +1,10 @@
-<?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
-
+<?php
 /* *****************************************************************************
- * Main error language file.
+ * Categories list page.
  * 
  * =============================================================================
  * 
- * THIS FILE IS PART OF BLEUELMEDIA PWDSTORE
+ * THIS FILE IS PART OF BLEUELMEDIA SIMPLE BANKING
  * (C)2012 bleuelmedia.com
  * 
  * This program is free software; you can redistribute it and/or modify it under
@@ -22,12 +21,33 @@
  * Software Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
  * 02110-1301 USA.
  * ****************************************************************************/
+?>
 
-$lang["error_FailedToLoadData"] = "Failed to load data.";
-$lang["error_PleaseCheckFollowingInput"] = "Please check the following input";
-$lang["error_ParameterError"] = "Parameter error";
-$lang["error_DataUpdateFailed"] = "Data update failed";
-$lang["error_FailedToCreateRecord"] = "Failed to create new record";
-$lang["error_FailedToDeleteRecord"] = "Failed to delete the record";
+<?php $even = true; ?>
 
-$lang["error_IllegalValueForField"] = "Illegal value '{value}' for field {field}";
+<h1><?=lang("categories_Categories")?></h1>
+
+<p><input 
+        type="button" 
+        onclick="document.location.href='<?=site_url("categories/create")?>'"
+        value="<?=lang("categories_CreateCategory")?>"></p>
+
+<table class="list">
+<thead>
+<tr>
+    <th><?=lang("categories_Name")?></th>
+    <th>&nbsp;</th>
+</tr>
+</thead>
+<tbody>
+<? foreach ($categories as $category): ?>
+<tr onclick="document.location.href='<?=site_url("categories/edit/".$category["id"])?>';">
+    <td<?=((!$even) ? " class=\"odd\"" : "")?>><?=$category["name"]?></td>
+    <td<?=((!$even) ? " class=\"odd\"" : "")?>>
+        [<a href="<?=site_url("categories/delete/".$category["id"])?>"><?=lang("common_Delete")?></a>]
+    </td>
+</tr>
+<? $even = !$even; ?>
+<? endforeach; ?>
+</tbody>
+</table>

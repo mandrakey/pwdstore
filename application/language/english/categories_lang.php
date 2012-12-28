@@ -1,7 +1,7 @@
 <?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 
 /* *****************************************************************************
- * Main error language file.
+ * Main categories language file.
  * 
  * =============================================================================
  * 
@@ -23,11 +23,18 @@
  * 02110-1301 USA.
  * ****************************************************************************/
 
-$lang["error_FailedToLoadData"] = "Failed to load data.";
-$lang["error_PleaseCheckFollowingInput"] = "Please check the following input";
-$lang["error_ParameterError"] = "Parameter error";
-$lang["error_DataUpdateFailed"] = "Data update failed";
-$lang["error_FailedToCreateRecord"] = "Failed to create new record";
-$lang["error_FailedToDeleteRecord"] = "Failed to delete the record";
+$lang["categories_Categories"] = "Categories";
+$lang["categories_EditCategory"] = "Edit Category";
+$lang["categories_CreateCategory"] = "Create Category";
+$lang["categories_CategoryUpdated_Title"] = "Update successful.";
+$lang["categories_CategoryUpdated_Message"] = "The category has been updated successfully.";
+$lang["categories_CategoryDeleted_Title"] = "Deletion successful";
+$lang["categories_CategoryDeleted_Message"] = "The category has been deleted from the database.";
+$lang["categories_CategoryCreated_Title"] = "New category created";
+$lang["categories_CategoryCreated_Message"] = "The new category record has been created.";
 
-$lang["error_IllegalValueForField"] = "Illegal value '{value}' for field {field}";
+$lang["categories_ReallyDeleteCategory"] = "Shall the category #{categoryId} ({name}) really be deleted?";
+
+//----
+// Table headings
+$lang["categories_Name"] = "Name";

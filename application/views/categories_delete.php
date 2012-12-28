@@ -1,11 +1,10 @@
-<?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
-
+<?php
 /* *****************************************************************************
- * Main error language file.
+ * Delete a category confirmation page.
  * 
  * =============================================================================
  * 
- * THIS FILE IS PART OF BLEUELMEDIA PWDSTORE
+ * THIS FILE IS PART OF BLEUELMEDIA SIMPLE BANKING
  * (C)2012 bleuelmedia.com
  * 
  * This program is free software; you can redistribute it and/or modify it under
@@ -22,12 +21,19 @@
  * Software Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
  * 02110-1301 USA.
  * ****************************************************************************/
+?>
 
-$lang["error_FailedToLoadData"] = "Failed to load data.";
-$lang["error_PleaseCheckFollowingInput"] = "Please check the following input";
-$lang["error_ParameterError"] = "Parameter error";
-$lang["error_DataUpdateFailed"] = "Data update failed";
-$lang["error_FailedToCreateRecord"] = "Failed to create new record";
-$lang["error_FailedToDeleteRecord"] = "Failed to delete the record";
-
-$lang["error_IllegalValueForField"] = "Illegal value '{value}' for field {field}";
+<div class="box">
+    <div class="body center">
+        <strong><?=plang("categories_ReallyDeleteCategory", array("categoryId" => $category["id"], "name" => $category["name"]))?></strong>
+        <p>
+            <?=form_open("categories/doDelete")?>
+            <input type="hidden" name="categoryId" value="<?=$category["id"]?>">
+            
+                <input type="submit" value="<?=lang("common_Yes")?>">
+                <input type="button" value="<?=lang("common_No")?>" 
+                       onclick="document.location.href='<?=site_url("categories")?>';">
+            </form>
+        </p>
+    </div>
+</div>
