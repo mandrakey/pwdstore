@@ -81,6 +81,7 @@ class AuthHelper
         
         $this->CI->load->model("users_model");
         $this->currentUser = $this->CI->users_model->getUser($userId);
+        $this->CI->config->set_item("language", $this->currentUser["language"]);
     }
     
     /**

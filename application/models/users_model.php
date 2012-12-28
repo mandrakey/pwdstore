@@ -33,10 +33,10 @@ class Users_model extends CI_Model
 {
     
     private static $fields = array(
-        "id", "name", "password", "email", "active", "level"
+        "id", "name", "password", "email", "active", "level", "language"
     );
     private static $necessaryFields = array(
-        "id", "name", "email", "active", "level"
+        "id", "name", "email", "language"
     );
     
     public static function fields()
@@ -89,7 +89,7 @@ class Users_model extends CI_Model
             throw new Exception("User_model.getUser: Illegal value '"
                 .var_export($id, true)."' for field 'id'");
         
-        $this->db->select("id, name, email, active, level");
+        $this->db->select("id, name, email, active, level, language");
         $res = $this->db->get_where("users", array("id" => $id));
         if (!$res || $res->num_rows() == 0)
             return array();
@@ -152,13 +152,13 @@ class Users_model extends CI_Model
      * @return ID of created user
      * @throws Exception
      */
-    public function insertUser($user)
+    public function insertUser(array $user)
     {
         if (!isset($user) || !is_array($user))
             throw new Exception("User_model.insertUser: Illegal value '"
                 .var_export($user, true)."' for field 'user'");
         
-        $userid = null;
+        $userId = null;
         try {
             ModelHelper::checkNecessaryFields($user, self::$necessaryFields, self::$fields);
             
@@ -174,19 +174,18 @@ class Users_model extends CI_Model
                 array("name" => $user["name"]),
                 1);
             
-            if ($res->num_rows() == 0) {$user = $res->result_array();
-            
+            if ($res->num_rows() == 0) {
                 $this->db->trans_rollback();
                 throw new Exception("Failed to retrieve new user's ID");
             }
             
             $row = $res->row_array();
-            $userid = $row["id"];
+            $userId = $row["id"];
         } catch (Exception $e) {
             throw $e;
         }
         
-        return $userid;
+        return $userId;
     }
     
     //==========================================================================

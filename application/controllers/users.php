@@ -1,7 +1,7 @@
 <?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 
 /* *****************************************************************************
- * Main user management controller.
+ * Main users controller.
  * 
  * =============================================================================
  * 
@@ -23,317 +23,265 @@
  * 02110-1301 USA.
  * ****************************************************************************/
 
-/**
- * Controller for user management.
- * @package com.bleuelmedia.banking
- * @author mbleuel <mbleuel@bleuelmedia.com>
- */
 class Users extends CI_Controller
 {
     
-    /**
-     * Checks wether current user has correct access rights or not.
-     * @retval boolean TRUE if the user may access the page, FALSE if not.
-     */
-    private function checkAuth() {
-        $auth = AuthHelper::getInstance();
-        if (!$auth->isLoggedIn() || !$auth->hasLevel("0")) {
-            $tpl = Template::getInstance();
-            $tpl->set("title", "Fehlende Berechtigung");
-            $tpl->set("message", "Sie sind nicht berechtigt, diesen Bereich zu "
-                ."betreten.");
-            $tpl->display("error/error");
-            return false;
+    private $auth;
+    private $tpl;
+    
+    public function __construct()
+    {
+        parent::__construct();
+        
+        $this->auth = AuthHelper::getInstance();
+        $this->tpl = Template::getInstance();
+        if (!$this->auth->isLoggedIn()) {
+            redirect("login");
+            return;
         }
         
-        return true;
+        $this->lang->load("users");
     }
     
     /**
-     * Display a list of all users.
+     * Display all existing users.
      */
     public function index()
-    {
-        if (!$this->checkAuth())
-            return;
-        
-        $tpl = Template::getInstance();
-        
-        //----
-        // Load all users
+    {        
         try {
             $this->load->model("users_model");
-            $users = $this->users_model->getUsers();
-            $tpl->set("users", $users);
+            $users = $this->users_model->getUsers(true);
+            $this->tpl->set("users", $users);
         } catch (Exception $e) {
-            $tpl->set("title", "Benutzerdaten konnten nicht abgerufen werden");
-            $tpl->set("message", $e->getMessage());
-            $tpl->display("error/error");
+            $this->tpl->set("title", lang("error_FailedToLoadData"));
+            $this->tpl->set("message", $e->getMessage());
+            $this->tpl->display("error/error");
             return;
         }
         
-        $tpl->display("users");
+        $this->tpl->display("users");
     }
     
+    /**
+     * Show form to create new user.
+     */
     public function create()
     {
-        if (!$this->checkAuth())
-            return;
-        
-        $tpl = Template::getInstance();
-        $tpl->display("users_new");
+        $this->tpl->display("users_create");
     }
     
-    public function create_save()
+    /**
+     * Finally create new category.
+     */
+    public function doCreate()
     {
-        if (!$this->checkAuth())
-            return;
-        
-        $tpl = Template::getInstance();
-        
-        //====
-        // Get and check user data
-        
-        $this->load->model("users_model");
+        //----
+        // Get data from post
         $user = array(
             "id" => -1,
+            "active" => $this->input->post("active"),
+            "level" => $this->input->post("level"),
             "name" => $this->input->post("name"),
             "email" => $this->input->post("email"),
-            "firstname" => $this->input->post("firstname"),
-            "lastname" => $this->input->post("lastname"),
-            "active" => $this->input->post("active"),
-            "level" => $this->input->post("level")
+            "language" => $this->input->post("language")
         );
         
         //----
-        // Check for updated password
-        $newPassword = $this->input->post("newPassword");
-        $newPasswordConfirmation = $this->input->post("newPasswordConfirmation");
-        if ($newPassword !== "") {
-            if ($newPassword !== $newPasswordConfirmation) {
-                $tpl->set("title", "Passwort");
-                $tpl->set("message", "Das Passwort und seine Bestätigung "
-                    ."stimmen nicht überein!");
-                $tpl->display("error/error");
-                return;
-            }
-            
-            $user["password"] = sha1($newPassword);
-        } else {
-            $user["password"] = sha1("password");
-        }
-        
-        //====
-        // Save data
-        
-        $userid = -1;
-        try {
-            $this->db->trans_begin();
-            $userid = $this->users_model->insertUser($user);
-            $this->db->trans_commit();
-        } catch (Exception $e) {
-            $tpl->set("title", "Fehler beim Speichern der Daten");
-            $tpl->set("message", $e->getMessage());
-            $tpl->display("error/error");
+        // Check entered password
+        $password = $this->input->post("password");
+        $passwordConfirmation = $this->input->post("passwordConfirmation");
+        if (!$password || !$passwordConfirmation || trim($password) == "" || trim($passwordConfirmation) == "") {
+            $this->tpl->set("title", lang("error_ParameterError"));
+            $this->tpl->set("message", lang("users_PleaseEnterPasswordAndConfirmation"));
+            $this->tpl->display("error/error");
+            return;
+        } elseif ($password !== $passwordConfirmation) {
+            $this->tpl->set("title", lang("error_ParameterError"));
+            $this->tpl->set("message", lang("users_PasswordDoesNotMatchConfirmation"));
+            $this->tpl->display("error/error");
             return;
         }
         
+        $user["password"] = sha1($password);
+        
         //----
-        // Display message
-        $tpl->set("title", "Benutzer angelegt");
-        $tpl->set("message", "Der Benutzer ".$user["name"]." wurde "
-            ."erstellt.<br><br>"
-            ."<b>Weiteres Vorgehen:</b><br>"
-            ."<a href=\"".site_url("users/edit/".$userid)."\">".$user["name"]." bearbeiten</a><br>"
-            ."<a href=\"".site_url("users")."\">Zurück zur Übersicht</a><br>");
-        $tpl->display("message");
+        // Save data
+        $this->db->trans_begin();
+
+        $userId = null;
+        try {
+            $this->load->model("users_model");
+            $userId = $this->users_model->insertUser($user);
+        } catch (Exception $e) {
+            $this->tpl->set("title", lang("error_FailedToCreateRecord"));
+            $this->tpl->set("message", $e->getMessage());
+            $this->tpl->display("error/error");
+            return;
+        }
+        
+        $this->db->trans_commit();
+        
+        // Success !
+        $this->tpl->set("title", lang("users_UserCreated_Title"));
+        $this->tpl->set("message", lang("users_UserCreated_Message")
+            ."<br><br><b>".lang("dialog_FurtherActions")."</b><br>"
+            ."- <a href=\"".site_url("users")."\">"
+            .lang("dialog_BackTo")." ".lang("users_Users")."</a>");
+        $this->tpl->display("message");
     }
     
     /**
-     * Edit a specific user.
-     * @param int $userId Id of the user to edit.
+     * Edit details of a user entry.
+     * @param int $userId
      */
     public function edit($userId)
     {
-        if (!$this->checkAuth())
-            return;
-        
-        $tpl = Template::getInstance();
-        
+        //----
+        // Check user id
         if (!isset($userId) || !is_numeric($userId)) {
-            $tpl->set("title", "Parameterfehler");
-            $tpl->set("message", "Illegaler Wert '"
-                .var_export($userId, true)."' für Feld 'userId'");
-            $tpl->display("error/error");
+            $this->tpl->set("title", lang("error_ParameterError"));
+            $this->tpl->set("message", plang("error_IllegalValueForField", 
+                array("field" => "userId", "value" => var_export($userId, true))));
+            $this->tpl->display("error/error");
             return;
         }
         
-        //====
-        // Get user data
-        
-        $user = array();
+        //----
+        // Load data
         try {
             $this->load->model("users_model");
             $user = $this->users_model->getUser($userId);
+            $this->tpl->set("user", $user);
         } catch (Exception $e) {
-            $tpl->set("title", "Fehler beim Abrufen der Daten");
-            $tpl->set("message", $e->getMessage());
-            $tpl->display("error/error");
+            $this->tpl->set("title", lang("error_FailedToLoadData"));
+            $this->tpl->set("message", $e->getMessage());
+            $this->tpl->display("error/error");
             return;
         }
         
-        if (count($user) == 0) {
-            $tpl->set("title", "Der gewählte Benutzer wurde nicht gefunden");
-            $tpl->set("message", "");
-            $tpl->display("error/error");
-            return;
-        }
-        
-        $tpl->set("currentUser", $user);
-        $tpl->js("users");
-        $tpl->display("users_edit");
+        $this->tpl->js("users");
+        $this->tpl->display("users_edit.php");
     }
     
     /**
-     * Save changed user data.
+     * Save changed category's data.
      */
-    public function save()
+    public function doEdit()
     {
-        if (!$this->checkAuth())
-            return;
-        
-        $tpl = Template::getInstance();
-        
-        //====
-        // Get and check user data
-        
-        $userid = $this->input->post("userid");
-        if (!$userid || !is_numeric($userid)) {
-            $tpl->set("title", "Parameterfehler");
-            $tpl->set("message", "Illegaler Wert '".var_export($userid, true)."' "
-                ."für Feld 'userid'");
-            $tpl->display("error/error");
-            return;
-        }
-        
-        $this->load->model("users_model");
-        $user = array(
-            "name" => $this->input->post("name"),
-            "email" => $this->input->post("email"),
-            "firstname" => $this->input->post("firstname"),
-            "lastname" => $this->input->post("lastname"),
-            "active" => $this->input->post("active"),
-            "level" => $this->input->post("level")
+        return;
+        //----
+        // Get data from post
+        $categoryId = $this->input->post("categoryId");
+        $category = array(
+            "id" => $categoryId,
+            "name" => $this->input->post("name")
         );
         
         //----
-        // Check for updated password
-        $newPassword = $this->input->post("newPassword");
-        $newPasswordConfirmation = $this->input->post("newPasswordConfirmation");
-        if ($newPassword !== "") {
-            if ($newPassword !== $newPasswordConfirmation) {
-                $tpl->set("title", "Geändertes Passwort");
-                $tpl->set("message", "Das geänderte Passwort und seine Bestätigung "
-                    ."stimmen nicht überein!");
-                $tpl->display("error/error");
-                return;
-            }
-            
-            $user["password"] = sha1($newPassword);
-        }
-        
-        //====
-        // Save data
-        
-        try {
-            $this->users_model->updateUser($userid, $user);
-        } catch (Exception $e) {
-            $tpl->set("title", "Fehler beim Abrufen der Daten");
-            $tpl->set("message", $e->getMessage());
-            $tpl->display("error/error");
+        // Check data
+        if (!$categoryId || !is_numeric($categoryId)) {
+            $this->tpl->set("title", lang("error_ParameterError"));
+            $this->tpl->set("message", plang("error_IllegalValueForField",
+                array("field" => "categoryId", "value" => var_export($categoryId, true))));
+            $this->tpl->display("error/error");
             return;
         }
         
         //----
-        // Display message
-        $tpl->set("title", "Benutzer gespeichert");
-        $tpl->set("message", "Die Benutzerdaten für ".$user["name"]." wurden "
-            ."übernommen.<br><br>"
-            ."<b>Weiteres Vorgehen:</b><br>"
-            ."<a href=\"".site_url("users/edit/".$userid)."\">Zurück zu ".$user["name"]."</a><br>"
-            ."<a href=\"".site_url("users")."\">Zurück zur Übersicht</a><br>");
-        $tpl->display("message");
+        // Save data
+        $this->db->trans_begin();
         
+        try {
+            $this->load->model("categories_model");
+            $this->categories_model->update(intval($categoryId), $category);
+        } catch (Exception $e) {
+            $this->tpl->set("title", lang("error_DataUpdateFailed"));
+            $this->tpl->set("message", $e->getMessage());
+            $this->tpl->display("error/error");
+            return;
+        }
+        
+        $this->db->trans_commit();
+        
+        // Success !
+        $this->tpl->set("title", lang("categories_CategoryUpdated_Title"));
+        $this->tpl->set("message", lang("categories_CategoryUpdated_Message")
+            ."<br><br><b>".lang("dialog_FurtherActions")."</b><br>"
+            ."- <a href=\"".site_url("categories")."\">"
+            .lang("dialog_BackTo")." ".lang("categories_Categories")."</a>");
+        $this->tpl->display("message");
     }
     
     /**
-     * Ask confirmation for deleting a given user.
-     * @param int $userId
+     * Show a confirmation page: Really delete the category?
+     * @param int $categoryId The ID of the category to delete
+     * @return type
      */
-    public function delete($userId)
+    public function delete($categoryId)
     {
-        if (!$this->checkAuth())
-            return;
-        
-        $tpl = Template::getInstance();
-        
-        if (!isset($userId) || !is_numeric($userId)) {
-            $tpl->set("title", "Parameterfehler");
-            $tpl->set("message", "Illegaler Wert '"
-                .var_export($userId, true)."' für Feld 'userId'");
-            $tpl->display("error/error");
+        return;
+        if (!isset($categoryId) || !is_numeric($categoryId)) {
+            $this->tpl->set("title", lang("error_ParameterError"));
+            $this->tpl->set("message", plang("error_IllegalValueForField",
+                array("field" => "categoryId", "value" => var_export($categoryId, true))));
+            $this->tpl->display("error/error");
             return;
         }
         
-        //====
-        // Get user data
-        
-        $user = array();
+        //----
+        // Get category data
         try {
-            $this->load->model("users_model");
-            $user = $this->users_model->getUser($userId);
+            $this->load->model("categories_model");
+            $category = $this->categories_model->get(intval($categoryId));
+            $this->tpl->set("category", $category);
         } catch (Exception $e) {
-            $tpl->set("title", "Fehler beim Abrufen der Daten");
-            $tpl->set("message", $e->getMessage());
-            $tpl->display("error/error");
+            $this->tpl->set("title", lang("error_FailedToLoadData"));
+            $this->tpl->set("message", $e->getMessage());
+            $this->tpl->display("error/error");
             return;
         }
         
-        if (count($user) == 0) {
-            $tpl->set("title", "Der gewählte Benutzer wurde nicht gefunden");
-            $tpl->set("message", "");
-            $tpl->display("error/error");
-            return;
-        }
-        
-        $tpl->set("currentUser", $user);
-        $tpl->display("users_delete");
+        $this->tpl->display("categories_delete");
     }
     
-    public function delete_ok()
+    /**
+     * Finally really delete a record.
+     */
+    public function doDelete()
     {
-        if (!$this->checkAuth())
-            return;
-        
-        $tpl = Template::getInstance();
-        
-        $userId = $this->input->post("userId");
-        if (!isset($userId) || !is_numeric($userId)) {
-            $tpl->set("title", "Parameterfehler");
-            $tpl->set("message", "Illegaler Wert '"
-                .var_export($userId, true)."' für Feld 'userId'");
-            $tpl->display("error/error");
+        return;
+        $categoryId = $this->input->post("categoryId");
+        if (!$categoryId || !is_numeric($categoryId)) {
+            $this->tpl->set("title", lang("error_ParameterError"));
+            $this->tpl->set("message", plang("error_IllegalValueForField", 
+                array("field" => "categoryId", "value" => var_export($categoryId, true))));
+            $this->tpl->display("error/error");
             return;
         }
         
-        // Delete the user
-        $this->load->model("users_model");
-        $this->users_model->deleteUser(intval($userId));
+        //----
+        // Delete the secret
+        $this->db->trans_begin();
         
-        $tpl->set("title", "Der Benutzer wurde erfolgreich gelöscht");
-        $tpl->set("message", 
-            "<a href=\"".site_url("users")."\">Zur Benutzerübersicht</a>");
-        $tpl->display("message");
+        try {
+            $this->load->model("categories_model");
+            $this->categories_model->delete($categoryId);
+        } catch (Exception $e) {
+            $this->tpl->set("title", lang("error_FailedToDeleteRecord"));
+            $this->tpl->set("message", $e->getMessage());
+            $this->tpl->display("error/error");
+            return;
+        }
+        
+        $this->db->trans_commit();
+        
+        // Success!
+        $this->tpl->set("title", lang("categories_CategoryDeleted_Title"));
+        $this->tpl->set("message", lang("categories_CategoryDeleted_Message")
+            ."<br><br><b>".lang("dialog_FurtherActions")."</b><br>"
+            ."- <a href=\"".site_url("categories")."\">"
+            .lang("dialog_BackTo")." ".lang("categories_Categories")."</a>");
+        $this->tpl->display("message");
     }
     
 }

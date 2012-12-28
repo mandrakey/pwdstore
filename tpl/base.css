@@ -195,6 +195,9 @@ div.form div.body input[type=button] {
     cursor: pointer;
     width: auto;
 }
+div.form div.body input[type=checkbox] {
+    width: auto;
+}
 
 div.form div.body select {
     border: 1px solid #000;
