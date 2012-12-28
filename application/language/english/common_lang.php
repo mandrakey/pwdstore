@@ -52,3 +52,10 @@ $lang["common_No"] = "No";
 // Dialog texts
 $lang["dialog_FurtherActions"] = "Further actions";
 $lang["dialog_BackTo"] = "Back to";
+
+//----
+// Login dialog
+$lang["login_EnterUserData"] = "Enter your user data";
+$lang["login_Username"] = "Username";
+$lang["login_Password"] = "Password";
+$lang["login_Login"] = "Login";
