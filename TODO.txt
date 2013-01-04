@@ -1,0 +1,16 @@
+= TODO List pwdStore
+
+== Bugs to fix
+* Correct translation problems in navigation (english used when german is selected)
+
+== New Features
+* JavaScript QuickSearch function for filtering secrets list
+* Secrets print view
+* Transferring secrets to other users
+* After creating secret/category: Quicklink to "create another"
+* Export to CSV/ODS, eventually PDF
+* Backup in own binary file format (.pwdstore), restoreable and encryptable 
+    Perhaps make backup un-encrypted if wanted (so it can be restored using 
+    a completely different user)
+* Registration page to be enabled by admins
+* Delete categories including all secrets (instead of aborting)
