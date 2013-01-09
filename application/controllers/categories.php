@@ -110,6 +110,8 @@ class Categories extends CI_Controller
         $this->tpl->set("title", lang("categories_CategoryCreated_Title"));
         $this->tpl->set("message", lang("categories_CategoryCreated_Message")
             ."<br><br><b>".lang("dialog_FurtherActions")."</b><br>"
+            ."- <a href=\"".site_url("categories/create")."\">"
+            .lang("categories_CreateAnotherCategory")."</a><br>"
             ."- <a href=\"".site_url("categories")."\">"
             .lang("dialog_BackTo")." ".lang("categories_Categories")."</a>");
         $this->tpl->display("message");

@@ -35,6 +35,7 @@ $lang["secrets_SecretCreated_Title"] = "Neuer Eintrag angelegt";
 $lang["secrets_SecretCreated_Message"] = "Der neue Eintrag wurde erzeugt.";
 $lang["secrets_SeparatedWithCommas"] = "Durch Kommas getrennt";
 $lang["secrets_TagsPLACEHOLDER"] = "tag1,tag2,tag3 ...";
+$lang["secrets_CreateAnotherSecret"] = "Weiteren Eintrag anlegen";
 
 $lang["secrets_ReallyDeleteSecret"] = "Soll der Eintrag #{secretId} ({description}), Kategorie \"{category}\", wirklich gelöscht werden?";
 

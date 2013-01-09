@@ -32,6 +32,7 @@ $lang["categories_CategoryDeleted_Title"] = "Deletion successful";
 $lang["categories_CategoryDeleted_Message"] = "The category has been deleted from the database.";
 $lang["categories_CategoryCreated_Title"] = "New category created";
 $lang["categories_CategoryCreated_Message"] = "The new category record has been created.";
+$lang["categories_CreateAnotherCategory"] = "Create another category";
 
 $lang["categories_ReallyDeleteCategory"] = "Shall the category #{categoryId} ({name}) really be deleted?";
 

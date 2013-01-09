@@ -35,6 +35,7 @@ $lang["secrets_SecretCreated_Title"] = "New secret created";
 $lang["secrets_SecretCreated_Message"] = "The new secret record has been created.";
 $lang["secrets_SeparatedWithCommas"] = "Separated with commas";
 $lang["secrets_TagsPLACEHOLDER"] = "tag1,tag2,tag3 ...";
+$lang["secrets_CreateAnotherSecret"] = "Create another secret";
 
 $lang["secrets_ReallyDeleteSecret"] = "Shall the secret #{secretId} ({description}), category \"{category}\", really be deleted?";
 

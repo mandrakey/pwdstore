@@ -152,7 +152,10 @@ class Secrets extends CI_Controller
         $this->tpl->set("title", lang("secrets_SecretCreated_Title"));
         $this->tpl->set("message", lang("secrets_SecretCreated_Message")
             ."<br><br><b>".lang("dialog_FurtherActions")."</b><br>"
-            ."- <a href=\"".site_url("secrets/view/".$secretId)."\">".lang("secrets_ViewSecretEntry")."</a><br>"
+            ."- <a href=\"".site_url("secrets/create")."\">"
+            .lang("secrets_CreateAnotherSecret")."</a>"
+            ."- <a href=\"".site_url("secrets/view/".$secretId)."\">"
+            .lang("secrets_ViewSecretEntry")."</a><br>"
             ."- <a href=\"".site_url("secrets")."\">"
             .lang("dialog_BackTo")." ".lang("secrets_Secrets")."</a>");
         $this->tpl->display("message");
