@@ -89,6 +89,10 @@ class Template
         try {
             $CI = get_instance();
             
+            // Load default language files
+            $CI->load->language("error");
+            $CI->load->language("common");
+            
             if (!$plain)
                 $CI->load->view("inc/header.php", $this->data);
             $CI->load->view($tpl, $this->data);
