@@ -1,7 +1,6 @@
 = TODO List pwdStore
 
 == Bugs to fix
-* Correct translation problems in navigation (english used when german is selected)
 
 == New Features
 * JavaScript QuickSearch function for filtering secrets list
