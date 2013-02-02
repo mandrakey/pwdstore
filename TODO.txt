@@ -3,7 +3,6 @@
 == Bugs to fix
 
 == New Features
-* JavaScript QuickSearch function for filtering secrets list
 * Secrets print view
 * Transferring secrets to other users
 * Export to CSV/ODS, eventually PDF

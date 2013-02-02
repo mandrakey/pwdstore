@@ -27,7 +27,19 @@
 
 <h1><?=lang("secrets_Secrets")?></h1>
 
-<table class="list">
+<div>
+    <?=lang("common_FilterList")?>: 
+    <input type="text"
+           onkeyup="filterHtmlTable(event, this, [0,1])"
+           ref="secretsList"
+           id="secretsListFilter"> 
+    <img src="<?=base_url()?>/tpl/img/edit-clear.png" alt="<?=lang("common_Clear")?>"
+         onclick="filterHtmlTable({type: 'keyup', charCode: 0, keyCode: 27}, $('#secretsListFilter'), [0,1])"
+         style="cursor: pointer;"><br>
+    &nbsp;
+</div>
+
+<table class="list" id="secretsList" ref="category_name,description">
 <thead>
 <tr>
     <th><?=lang("secrets_Category")?></th>
@@ -39,8 +51,8 @@
 <tbody>
 <? foreach ($secrets as $secret): ?>
 <tr onclick="document.location.href='<?=site_url("secrets/view/".$secret["id"])?>';">
-    <td<?=((!$even) ? " class=\"odd\"" : "")?>><?=$secret["category_name"]?></td>
-    <td<?=((!$even) ? " class=\"odd\"" : "")?>><?=$secret["description"]?></td>
+    <td<?=((!$even) ? " class=\"odd\"" : "")?> name="category_name"><?=$secret["category_name"]?></td>
+    <td<?=((!$even) ? " class=\"odd\"" : "")?> name="description"><?=$secret["description"]?></td>
     <td<?=((!$even) ? " class=\"odd\"" : "")?>><?=date(lang("common_DATE_YMD"), strtotime($secret["date"]))?></td>
     <td<?=((!$even) ? " class=\"odd\"" : "")?>>
         [<a href="<?=site_url("secrets/edit/".$secret["id"])?>"><?=lang("common_Edit")?></a>]<br>

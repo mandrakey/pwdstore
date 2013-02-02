@@ -47,6 +47,8 @@ $lang["common_Edit"] = "Bearbeiten";
 $lang["common_Delete"] = "Löschen";
 $lang["common_Yes"] = "Ja";
 $lang["common_No"] = "Nein";
+$lang["common_FilterList"] = "Liste filtern";
+$lang["common_Clear"] = "Leeren";
 
 //----
 // Dialog texts
