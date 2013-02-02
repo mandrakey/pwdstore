@@ -205,7 +205,6 @@ class Users_model extends CI_Model
             throw new Exception("User_model.update: Illegal value '"
                 .var_export($data, true)."' for field 'data'");
         
-        array_shift($data);
         $this->db->where("id", $user);
         $this->db->update("users", $data);
     }

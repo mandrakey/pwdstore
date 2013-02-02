@@ -46,6 +46,7 @@ class Settings extends CI_Controller
         }
         
         $this->lang->load("settings");
+        $this->lang->load("common");
     }
     
     /**
@@ -88,7 +89,7 @@ class Settings extends CI_Controller
         $this->db->trans_begin();
         
         try {
-            $this->users_model->updateUser($userId, $data);
+            $this->users_model->update($userId, $data);
         } catch (Exception $e) {
             $this->tpl->set("title", lang("error_DataUpdateFailed"));
             $this->tpl->set("message", $e->getMessage());
