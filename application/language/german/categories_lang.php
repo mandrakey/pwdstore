@@ -33,6 +33,11 @@ $lang["categories_CategoryDeleted_Message"] = "Die Kategorie wurde aus der Daten
 $lang["categories_CategoryCreated_Title"] = "Kategorie angelegt";
 $lang["categories_CategoryCreated_Message"] = "Die neue Kategorie wurde erfolgreich angelegt.";
 $lang["categories_CreateAnotherCategory"] = "Weitere Kategorie anlegen";
+$lang["categories_HasSecrets"] = "Diese Kategorie enthält noch Daten, welche "
+    ."zusammen mit der Kategorie gelöscht werden müssten";
+$lang["categories_DeleteSecretsAsWell"] = "Ja, Daten mit der Kategorie löschen";
+$lang["categories_DeleteSecretsNotConfirmed"] = "Das Löschen der Daten in der "
+    ."Kategorie wurde nicht bestätigt";
 
 $lang["categories_ReallyDeleteCategory"] = "Soll die Kategorie #{categoryId} ({name}) wirklich gelöscht werden?";
 

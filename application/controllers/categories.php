@@ -218,6 +218,9 @@ class Categories extends CI_Controller
             $this->load->model("categories_model");
             $category = $this->categories_model->get(intval($categoryId));
             $this->tpl->set("category", $category);
+            
+            $hasSecrets = $this->categories_model->hasSecrets(intval($categoryId));
+            $this->tpl->set("hasSecrets", $hasSecrets);
         } catch (Exception $e) {
             $this->tpl->set("title", lang("error_FailedToLoadData"));
             $this->tpl->set("message", $e->getMessage());
@@ -234,6 +237,7 @@ class Categories extends CI_Controller
     public function doDelete()
     {
         $categoryId = $this->input->post("categoryId");
+        $hasSecrets = $this->input->post("hasSecrets");
         if (!$categoryId || !is_numeric($categoryId)) {
             $this->tpl->set("title", lang("error_ParameterError"));
             $this->tpl->set("message", plang("error_IllegalValueForField", 
@@ -241,12 +245,33 @@ class Categories extends CI_Controller
             $this->tpl->display("error/error");
             return;
         }
+        if ($hasSecrets === false || !is_numeric($hasSecrets)
+                || (intval($hasSecrets) < 0 && intval($hasSecrets) > 1)) {
+            $this->tpl->set("title", lang("error_ParameterError"));
+            $this->tpl->set("message", plang("error_IllegalValueForField", 
+                array("field" => "hasSecrets", "value" => var_export($hasSecrets, true))));
+            $this->tpl->display("error/error");
+            return;
+        }
         
+        // Check "delete secrets"
+        if (intval($hasSecrets)) {
+            $deleteSecrets = $this->input->post("deleteSecrets");
+            if (!$deleteSecrets || !is_numeric($deleteSecrets)
+                    || intval($deleteSecrets) != 1) {
+                $this->tpl->set("title", lang("error_ParameterError"));
+                $this->tpl->set("message", lang("categories_DeleteSecretsNotConfirmed"));
+                $this->tpl->display("error/error");
+                return;
+            }
+        }
+        return; // TODO: Remove safeguard when deleting secrets in category works
         //----
-        // Delete the secret
+        // Delete the category
         $this->db->trans_begin();
         
         try {
+            // TODO: Implement deletion of secrets in the category
             $this->load->model("categories_model");
             $this->categories_model->delete($categoryId);
         } catch (Exception $e) {

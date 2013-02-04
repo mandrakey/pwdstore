@@ -27,8 +27,17 @@
     <div class="body center">
         <strong><?=plang("categories_ReallyDeleteCategory", array("categoryId" => $category["id"], "name" => $category["name"]))?></strong>
         <p>
+            <? if ($hasSecrets): ?>
+            <em><?=lang("categories_HasSecrets")?></em><br>
+            <? endif; ?>
             <?=form_open("categories/doDelete")?>
             <input type="hidden" name="categoryId" value="<?=$category["id"]?>">
+            <input type="hidden" name="hasSecrets" value="<?=($hasSecrets) ? "1" : "0"?>">
+            
+                <? if ($hasSecrets): ?>
+                <input type="checkbox" name="deleteSecrets" value="1" required> 
+                <?=lang("categories_DeleteSecretsAsWell")?><br><br>
+                <? endif; ?>
             
                 <input type="submit" value="<?=lang("common_Yes")?>">
                 <input type="button" value="<?=lang("common_No")?>" 

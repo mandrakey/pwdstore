@@ -94,6 +94,28 @@ class Categories_model extends CI_Model
         return $res->row_array();
     }
     
+    /**
+     * Determine wether given category contains at least one secret.
+     * @param int $categoryId
+     * @retval bool Does this category contain at least one secret?
+     * @throws Exception
+     */
+    public function hasSecrets($categoryId)
+    {
+        if (!isset($categoryId) || !is_numeric($categoryId))
+            throw new Exception("Categories_model.hasSecrets: Illegal value "
+                ."'".$categoryId."' for field 'categoryId'");
+        
+        $this->db->select("count(*) AS count");
+        $res = $this->db->get_where("secrets", array("category" => $categoryId));
+        if (!$res || $res->num_rows() == 0)
+            throw new Exception("Categories_model.hasSecrets: Failed to "
+                ."retrieve secrets count for category #".$categoryId);
+        
+        $data = $res->row_array();
+        return (intval($data["count"]) == 0) ? false : true;
+    }
+    
     //==========================================================================
     // INSERT
     
