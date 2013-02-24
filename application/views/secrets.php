@@ -39,7 +39,7 @@
     &nbsp;
 </div>
 
-<table class="list" id="secretsList" ref="category_name,description">
+<table class="list" id="secretsList">
 <thead>
 <tr>
     <th><?=lang("secrets_Category")?></th>

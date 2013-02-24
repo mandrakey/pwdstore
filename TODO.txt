@@ -10,4 +10,3 @@
     Perhaps make backup un-encrypted if wanted (so it can be restored using 
     a completely different user)
 * Registration page to be enabled by admins
-* Delete categories including all secrets (instead of aborting)

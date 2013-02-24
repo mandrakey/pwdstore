@@ -32,7 +32,19 @@
         onclick="document.location.href='<?=site_url("categories/create")?>'"
         value="<?=lang("categories_CreateCategory")?>"></p>
 
-<table class="list">
+<div>
+    <?=lang("common_FilterList")?>: 
+    <input type="text"
+           onkeyup="filterHtmlTable(event, this, [0])"
+           ref="categoryList"
+           id="categoryListFilter"> 
+    <img src="<?=base_url()?>/tpl/img/edit-clear.png" alt="<?=lang("common_Clear")?>"
+         onclick="filterHtmlTable({type: 'keyup', charCode: 0, keyCode: 27}, $('#categoryListFilter'), [0])"
+         style="cursor: pointer;"><br>
+    &nbsp;
+</div>
+
+<table class="list" id="categoryList">
 <thead>
 <tr>
     <th><?=lang("categories_Name")?></th>
