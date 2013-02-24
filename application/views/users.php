@@ -36,7 +36,7 @@
 <thead>
 <tr>
     <th><?=lang("users_Name")?></th>
-    <th><?=lang("users_EMail")?></th>
+    <th class="unimportant"><?=lang("users_EMail")?></th>
     <th><?=lang("users_Active")?></th>
     <th><?=lang("users_Level")?></th>
     <th>&nbsp;</th>
@@ -45,11 +45,11 @@
 <tbody>
 <? foreach ($users as $user): ?>
 <tr onclick="document.location.href='<?=site_url("users/edit/".$user["id"])?>';">
-    <td<?=((!$even) ? " class=\"odd\"" : "")?>><?=$user["name"]?></td>
-    <td<?=((!$even) ? " class=\"odd\"" : "")?>><?=$user["email"]?></td>
-    <td<?=((!$even) ? " class=\"odd\"" : "")?>><?=$user["active"]?></td>
-    <td<?=((!$even) ? " class=\"odd\"" : "")?>><?=$user["level"]?></td>
-    <td<?=((!$even) ? " class=\"odd\"" : "")?>>
+    <td class="<?=((!$even) ? " odd" : "")?>"><?=$user["name"]?></td>
+    <td class="unimportant<?=((!$even) ? " odd" : "")?>"><?=$user["email"]?></td>
+    <td class="<?=((!$even) ? " odd" : "")?>"><?=$user["active"]?></td>
+    <td class="<?=((!$even) ? " odd" : "")?>"><?=$user["level"]?></td>
+    <td class="<?=((!$even) ? " odd" : "")?>">
         [<a href="<?=site_url("users/delete/".$user["id"])?>"><?=lang("common_Delete")?></a>]
     </td>
 </tr>

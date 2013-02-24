@@ -1,10 +1,10 @@
 /* *****************************************************************************
- * Main template stylesheet.
+ * Small devices template stylesheet.
  * 
  * =============================================================================
  * 
- * THIS FILE IS PART OF BLEUELMEDIA SIMPLE BANKING
- * (C)2012 bleuelmedia.com
+ * THIS FILE IS PART OF PWDSTORE
+ * (C)2013 Maurice Bleuel
  * 
  * This program is free software; you can redistribute it and/or modify it under
  * the terms of the GNU General Public License version 3 as published by the
@@ -31,6 +31,7 @@
 body {
     font-size: 12pt;
     background: #eee;
+    margin: 0;
 }
 
 a {
@@ -46,12 +47,14 @@ input[type=button] {
     margin-bottom: 10px;
     padding: 5px;
     cursor: pointer;
+    height: 11mm;
 }
 input[type=submit] {
     border: 1px solid #000;
     margin-bottom: 10px;
     padding: 5px;
     cursor: pointer;
+    height: 11mm;
 }
 input:-moz-placeholder { color: #999; }
 input:-ms-input-placeholder { color: #999; }
@@ -75,10 +78,9 @@ span.note {
  * ****************************************************************************/
 
 #document {
-    width: 900px;
+    width: 100%;
     background: #fff;
     margin: auto;
-    padding: 10px;
 }
 
 /* *****************************************************************************
@@ -86,11 +88,10 @@ span.note {
  * ****************************************************************************/
 
 #footer {
-    width: 900px;
+    width: 100%;
     background: #fff;
     margin: auto;
     margin-top: 10px;
-    padding: 10px;
     text-align: center;
     font-size: 9pt;
     font-style: italic;
@@ -102,10 +103,10 @@ span.note {
  * ****************************************************************************/
 
 #navigation {
-    width: 880px;
+    width: 98%;
     background: #C55042;
     margin: auto;
-    padding: 10px;
+    padding-top: 10px;
     padding-bottom: 0;
     min-height: 40px;
     text-align: center;
@@ -130,7 +131,7 @@ span.note {
 #loginForm {
     border: 2px solid #000;
     background: #eee;
-    width: 450px;
+    width: 95%;
     margin: auto;
     margin-top: 20px;
     min-height: 100px;
@@ -164,7 +165,7 @@ span.note {
 div.form {
     border: 2px solid #000;
     background: #eee;
-    width: 100%;
+    width: 95%;
     margin: auto;
     margin-top: 20px;
     min-height: 100px;
@@ -174,29 +175,29 @@ div.form div.header {
     background: #000;
     color: #fff;
     font-weight: bold;
-    padding: 5px;
+    padding: 5px 0 5px 0;
 }
 
 div.form div.body {
-    padding: 20px;
+    padding: 0px;
 }
 
 div.form div.body input {
     border: 1px solid #000;
     margin-bottom: 10px;
-    padding: 5px;
-    width: 100%;
+    padding: 1px;
+    width: 95%;
 }
 div.form div.body input[type=submit] {
     cursor: pointer;
-    width: auto;
+    height: 11mm;
 }
 div.form div.body input[type=button] {
     cursor: pointer;
-    width: auto;
+    height: 11mm;
 }
 div.form div.body input[type=checkbox] {
-    width: auto;
+    height: 11mm;
 }
 
 div.form div.body select {
@@ -209,9 +210,9 @@ div.form div.body select {
 div.form div.body textarea {
     border: 1px solid #000;
     margin-bottom: 10px;
-    padding: 5px;
+    padding: 1px;
     background: #fff;
-    width: 100%;
+    width: 95%;
 }
 
 div.form div.body table {
@@ -229,7 +230,7 @@ div.form div.body table td {
 div.box {
     border: 2px solid #000;
     background: #eee;
-    width: 895px;
+    width: 100%;
     margin: auto;
     margin-top: 20px;
 }
@@ -262,18 +263,26 @@ table.list tbody tr {
 table.list td {
     background: #fff;
     text-align: center;
+    padding: 5mm 0 5mm 0;
 }
 table.list td.odd {
     background: #eee;
 }
+table.list td.unimportant {
+    display: none;
+}
 
 table.list th {
     text-align: center;
+    max-width: 25%;
+}
+table.list th.unimportant {
+    display: none;
 }
 
 table.list td span.action {
     display: block;
-    padding-bottom: 2px;
+    padding-bottom: 3mm;
 }
 
 /* *****************************************************************************

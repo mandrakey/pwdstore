@@ -42,21 +42,21 @@
 <table class="list" id="secretsList">
 <thead>
 <tr>
-    <th><?=lang("secrets_Category")?></th>
+    <th class="unimportant"><?=lang("secrets_Category")?></th>
     <th><?=lang("secrets_Description")?></th>
-    <th><?=lang("secrets_Date")?></th>
+    <th class="unimportant"><?=lang("secrets_Date")?></th>
     <th>&nbsp;</th>
 </tr>
 </thead>
 <tbody>
 <? foreach ($secrets as $secret): ?>
 <tr onclick="document.location.href='<?=site_url("secrets/view/".$secret["id"])?>';">
-    <td<?=((!$even) ? " class=\"odd\"" : "")?> name="category_name"><?=$secret["category_name"]?></td>
-    <td<?=((!$even) ? " class=\"odd\"" : "")?> name="description"><?=$secret["description"]?></td>
-    <td<?=((!$even) ? " class=\"odd\"" : "")?>><?=date(lang("common_DATE_YMD"), strtotime($secret["date"]))?></td>
-    <td<?=((!$even) ? " class=\"odd\"" : "")?>>
-        [<a href="<?=site_url("secrets/edit/".$secret["id"])?>"><?=lang("common_Edit")?></a>]<br>
-        [<a href="<?=site_url("secrets/delete/".$secret["id"])?>"><?=lang("common_Delete")?></a>]
+    <td class="unimportant<?=((!$even) ? " odd" : "")?>"><?=$secret["category_name"]?></td>
+    <td class="<?=((!$even) ? " odd" : "")?>"><?=$secret["description"]?></td>
+    <td class="unimportant<?=((!$even) ? " odd" : "")?>"><?=date(lang("common_DATE_YMD"), strtotime($secret["date"]))?></td>
+    <td class="<?=((!$even) ? " odd" : "")?>">
+        <span class="action">[<a href="<?=site_url("secrets/edit/".$secret["id"])?>"><?=lang("common_Edit")?></a>]</span>
+        <span class="action">[<a href="<?=site_url("secrets/delete/".$secret["id"])?>"><?=lang("common_Delete")?></a>]</span>
     </td>
 </tr>
 <? $even = !$even; ?>
