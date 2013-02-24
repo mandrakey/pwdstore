@@ -214,6 +214,22 @@ class Secrets_model extends CI_Model
         $this->db->delete("secrets", array("user_id" => $userId));
     }
     
+    /**
+     * Delete all existing secrets in a specific category.
+     * @param int $categoryId
+     * @throws Exception
+     */
+    public function deleteAllInCategory($categoryId)
+    {
+        if (!isset($categoryId) || !is_numeric($categoryId))
+            throw new Exception("Secrets_model.deleteAllInCategory: Illegal "
+                ."value '".var_export($categoryId, true)."' for field "
+                ."'categoryId'");
+        
+        // Delete all secrets
+        $this->db->delete("secrets", array("category" => $categoryId));
+    }
+    
 }
 
 /* End of file */

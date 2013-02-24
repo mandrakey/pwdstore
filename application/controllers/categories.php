@@ -265,14 +265,19 @@ class Categories extends CI_Controller
                 return;
             }
         }
-        return; // TODO: Remove safeguard when deleting secrets in category works
+        
         //----
         // Delete the category
         $this->db->trans_begin();
         
         try {
-            // TODO: Implement deletion of secrets in the category
             $this->load->model("categories_model");
+            
+            if (intval($hasSecrets) && intval($deleteSecrets)) {
+                $this->load->model("secrets_model");
+                $this->secrets_model->deleteAllInCategory($categoryId);
+            }
+            
             $this->categories_model->delete($categoryId);
         } catch (Exception $e) {
             $this->tpl->set("title", lang("error_FailedToDeleteRecord"));
