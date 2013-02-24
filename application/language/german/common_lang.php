@@ -31,7 +31,7 @@ $lang["common_DATE_YMD"] = "d.m.Y";
 
 //----
 // Navigation buttons
-$lang["navigation_Home"] = "Startseite";
+$lang["navigation_Home"] = "Geheimdaten";
 $lang["navigation_Settings"] = "Einstellungen";
 $lang["navigation_NewEntry"] = "Neuer Eintrag";
 $lang["navigation_Logout"] = "Logout";
