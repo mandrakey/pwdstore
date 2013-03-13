@@ -40,6 +40,7 @@ class Secrets extends CI_Controller
             return;
         }
         
+        $this->tpl->js("secrets");
         $this->lang->load("secrets");
     }
     

@@ -42,6 +42,9 @@
 <table class="list" id="secretsList">
 <thead>
 <tr>
+    <th>
+        <input type="checkbox" onclick="secretsList_selectallClick(this);">
+    </th>
     <th class="unimportant"><?=lang("secrets_Category")?></th>
     <th><?=lang("secrets_Description")?></th>
     <th class="unimportant"><?=lang("secrets_Date")?></th>
@@ -49,8 +52,16 @@
 </tr>
 </thead>
 <tbody>
+<?php $secret_index = 0; ?>
 <? foreach ($secrets as $secret): ?>
-<tr onclick="document.location.href='<?=site_url("secrets/view/".$secret["id"])?>';">
+<tr ref="<?=site_url("secrets/view/".$secret["id"])?>" onclick="secretsList_trClick(this);">
+    <td class="unimportant" onmouseover="enableTrClick(false);" onmouseout="enableTrClick(true);">
+        <input 
+            type="checkbox" 
+            name="export_<?=$secret_index++?>" 
+            ref="<?=$secret["id"]?>"
+            onclick="secretsList_exportClick(this, event);">
+    </td>
     <td class="unimportant<?=((!$even) ? " odd" : "")?>"><?=$secret["category_name"]?></td>
     <td class="<?=((!$even) ? " odd" : "")?>"><?=$secret["description"]?></td>
     <td class="unimportant<?=((!$even) ? " odd" : "")?>"><?=date(lang("common_DATE_YMD"), strtotime($secret["date"]))?></td>
