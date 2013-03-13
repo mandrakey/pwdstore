@@ -41,6 +41,7 @@ class Secrets extends CI_Controller
         }
         
         $this->tpl->js("secrets");
+        $this->lang->load("common");
         $this->lang->load("secrets");
     }
     
@@ -316,6 +317,83 @@ class Secrets extends CI_Controller
             ."- <a href=\"".site_url("secrets")."\">"
             .lang("dialog_BackTo")." ".lang("secrets_Secrets")."</a>");
         $this->tpl->display("message");
+    }
+    
+    /**
+     * Export one or more entries.
+     */
+    public function export()
+    {
+        $type = $this->input->post("type");
+        $secrets = $this->input->post("secrets");
+        
+        if (!is_string($type))
+            $type = "csv";
+        if (!is_string($secrets) || strlen($secrets) == 0) {
+            $this->tpl->set("title", lang("error_ParameterError"));
+            $this->tpl->set("message", plang("error_IllegalValueForField", 
+                array("field" => "secrets", "value" => var_export($secrets, true))));
+            $this->tpl->display("error/error");
+            return;
+        }
+        
+        $secrets = explode(",", $this->input->post("secrets"));
+        for ($i = 0; $i < count($secrets); ++$i)
+            $secrets[$i] = intval($secrets[$i]);
+        
+        $this->load->model("secrets_model");
+        $entries = $this->secrets_model->getDetailsIdIn($secrets);
+        
+        // Create CSV
+        if ($type == "csv")
+            $data = $this->export_csv($entries);
+        
+        foreach ($data["headers"] as $header)
+            header($header);
+        echo $data["content"];
+    }
+    
+    /**
+     * Create file content for CSV export.
+     * @param array $entries
+     * @retval array [headers, content]
+     */
+    private function export_csv($entries)
+    {
+        // Create CSV headings
+        $headings = array(
+            lang("secrets_Category"),
+            lang("secrets_Secret"),
+            lang("secrets_Tags"),
+            lang("secrets_Description"),
+            lang("secrets_Date"),
+            lang("secrets_Comment")
+        );
+        $csv = implode(";", $headings)."\n";
+        
+        // Add entries to CSV "table"
+        foreach ($entries as $entry) {
+            $line = array(
+                $entry["category_name"],
+                decryptSecret($entry["secret"]),
+                $entry["tags"],
+                $entry["description"],
+                date(lang("common_DATE_YMDHI"), strtotime($entry["date"])),
+                $entry["comment"]
+            );
+            $csv .= implode(";", $line)."\n";
+        }
+        
+        // Return everything
+        return array(
+            "headers" => array(
+                "Content-type: text/csv",
+                "Content-Disposition: attachment; filename=secrets.csv",
+                "Pragma: no-cache",
+                "Expires: 0"
+            ),
+            "content" => $csv
+        );
     }
     
 }

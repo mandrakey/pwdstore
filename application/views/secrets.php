@@ -39,6 +39,11 @@
     &nbsp;
 </div>
 
+<div id="secretsList_export">
+    Gewählte Einträge exportieren als: 
+    <a href="javascript:void(0);" onclick="secretsList_startExport('csv');">CSV</a>
+</div>
+
 <table class="list" id="secretsList">
 <thead>
 <tr>
@@ -74,3 +79,10 @@
 <? endforeach; ?>
 </tbody>
 </table>
+
+<div style="display: none;">
+<?=form_open("secrets/export", array("name" => "secretsExportForm"))?>
+    <input type="hidden" ref="export" name="type" value="csv">
+    <input type="hidden" ref="export" name="secrets" value="">
+</form>
+</div>

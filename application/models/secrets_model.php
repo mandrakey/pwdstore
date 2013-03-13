@@ -120,9 +120,31 @@ class Secrets_model extends CI_Model
         
         if (!$res || $res->num_rows() == 0)
             throw new Exception("Secrets_model.getDetails: The requested secret "
-                ."coult not be found.");
+                ."could not be found.");
         
         return $res->row_array();
+    }
+    
+    /**
+     * Fetch details for all secrets with an id in idList.
+     * @param array $idList List of numeric ID's
+     * @retval array List of matching secrets
+     */
+    public function getDetailsIdIn($idList)
+    {
+        if (!isset($idList) || !is_array($idList))
+            throw new Exception("Secrets_model.getDetailsIdIn: Illegal value '"
+                .var_export($idList, true)."' for field 'idList'");
+        
+        $this->db->select("secrets.*, categories.name AS category_name");
+        $this->db->join("categories", "secrets.category = categories.id");
+        $this->db->where_in("secrets.id", $idList);
+        $res = $this->db->get("secrets");
+        
+        if (!$res || $res->num_rows() == 0)
+            return array();
+        
+        return $res->result_array();
     }
     
     //==========================================================================

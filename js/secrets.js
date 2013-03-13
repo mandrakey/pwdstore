@@ -55,6 +55,13 @@ function secretsList_trClick(obj)
     document.location.href=url;
 }
 
+/**
+ * Handles click on one export checkbox.
+ * Can also handle shift+click selecting a range of entries.
+ * @param obj The HTML checkbox object being clicked
+ * @param e Event data for click-event
+ * @throws string
+ */
 function secretsList_exportClick(obj, e)
 {
     if (typeof(obj) == "undefined" || obj == null)
@@ -80,17 +87,23 @@ function secretsList_exportClick(obj, e)
         $("input[name^=export_]").each(function(nr, obj)
         {
             id = parseInt($(obj)[0].name.replace("export_", ""));
-            console.log("b: " + begin + ", e: " + end);
             if (id > begin && id < end) {
-                console.log("match " + id);
                 $(obj)[0].checked = !$(obj)[0].checked;
             }
-        });        
+        });
     } else {
         LAST_CLICKED_EXPORT = exportId;
     }
+    
+    secretsList_displayExportBox();
 }
 
+/**
+ * Handles click on "select all" checkbox.
+ * Either selects or deselects all available entries.
+ * @param obj The checkbox "select all"
+ * @param e Click event data
+ */
 function secretsList_selectallClick(obj, e)
 {
     if (typeof(obj) == "undefined" || obj == null)
@@ -98,5 +111,52 @@ function secretsList_selectallClick(obj, e)
     
     var doCheck = $(obj)[0].checked;
     $("input[name^=export_]").attr("checked", doCheck);
+    
+    EXPORT_COUNT = (doCheck) ? $("input[name^=export_]").length : 0;
+    secretsList_displayExportBox();
 }
+
+/**
+ * Displays or hides the entry export box depending on EXPORT_COUNT.
+ * The box is only visible if at least one entry is selected.
+ */
+function secretsList_displayExportBox()
+{
+    var checkCount = 0;
+    $("input[name^=export_]").each(function(nr, obj)
+    {
+        if (obj.checked)
+            checkCount++;
+    });
+    
+    console.log(checkCount);
+    if (checkCount > 0)
+        $('#secretsList_export').show();
+    else
+        $('#secretsList_export').hide();
+}
+
+function secretsList_startExport(type)
+{
+    if (typeof(type) == "undefined" || type == null)
+        return;
+    
+    var entryList = [];
+    $("input[name^=export_]").each(function(nr, obj)
+    {
+        if (obj.checked)
+            entryList.push($(obj).attr("ref"));
+    });
+    
+    $("input[ref=export][name=type]")[0].value = type;
+    $("input[ref=export][name=secrets]")[0].value = entryList.join(",");
+    $("form[name=secretsExportForm]")[0].submit();
+}
+
+//==============================================================================
+// AUTO EXECUTE
+
+$(document).ready(function() {
+    secretsList_displayExportBox();
+});
 
