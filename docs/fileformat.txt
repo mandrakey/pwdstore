@@ -1,0 +1,84 @@
+= The PWDSTORE SECRETS FILE file format
+Maurice Bleuel <mbleuel@bleuelmedia.com>
+1.0, 2013/03/14
+
+Copyright (C) 2013 Maurice Bleuel +
+This file is part of PWDSTORE.
+
+PWDSTORE is free software: you can redistribute and/or modify it under the 
+terms of the GNU General Public License as published by the Free 
+Software Foundation, either version 3 of the license, or (at your option) 
+any later version.
+
+PWDSTORE is distributed in the hope that it will be useful, but WITHOUT 
+ANY WARRANTY; without even the implied warranty of MERCHANTIBILITY or FITNESS 
+FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License along with 
+PWDSTORE. If not, see http://www.gnu.org/licenses/.
+
+image:http://www.gnu.org/graphics/gplv3-127x51.png[GPLv3]
+
+== Preamble
+This file describes the binary 'pwdstore secrets file (.psf)' file format used 
+to store one or more secrets and all their corresponding data in one file. The 
+main goal is to enable the user to easily backup and re-import secrets data in 
+a file format not easily readable with an ASCII text editor.
+
+Each file comes with some header information (version of PWDSTORE, contained 
+secret entries, encrypted yes/no ...) and a content section containing 
+secrets.
+
+== File header
+The header of a 'pwdstore secrets file' mainly contains information about the 
+system that created the file and about the file itself. All data is being 
+written binary, ordered top to bottom:
+
+.pwdstore secrets file header
+[options="header"]
+|====
+| Field | Description | Length
+| _DUMMY_ | A dummy field indicating a 'pwdstore secrets file', only contains the text "PWDSTORE" | 8 bytes
+| Version | Version of the PWDSTORE instance that created the file | 8 bytes
+| # secrets | Contains the count of secrets within the file | 3 bytes
+|====
+
+== File content
+The main part of the file contains information about secrets and the secret data 
+itself. Again, each secret entry consists of a header and a body.
+
+The header contains all fixed-size values for a secret plus indicators about 
+how long the variable-sized text fields are for one particular entry. +
+The body section contains the real text as binary encoded UTF-8 strings.
+
+.secret header
+[options="header"]
+|====
+| Field | Description | Length
+| id | The secret's database id | 4 bytes
+| user_id | The user this secret belongs to | 4 bytes
+| category | The cateogry this secret belongs to | 4 bytes
+| date | The date this secret was created/modified | 4 bytes
+| tags_length | Length of field 'tags' in bytes | 4 bytes
+| description_length | Length of field 'description' in bytes | 4 bytes
+| secret_length | Length of field 'secret' in bytes | 4 bytes
+| comment_length | Length of field 'comment' in bytes | 4 bytes
+|====
+
+NOTE: With this header, each and every secret entry (even if empty) has a size of 
+at least *32 bytes*.
+
+.secret body
+[options="header"]
+|====
+| Field | Description | Length
+| tags | The 'tags' value | L+1 bytes, L < 2^8
+| description | The 'description' of the secret | L+2 bytes, L < 2^16
+| secret | The real secret data, either encrypted or not | L+2 bytes, L < 2^16
+| comment | Comment about the secret | L+2 bytes, L < 2^16
+|====
+
+NOTE: *L* means the actual length of the text in characters
+
+NOTE: Each and every secret entry can have a maximum size of *196'903 bytes* or 
+    about *192 kilobytes*.
