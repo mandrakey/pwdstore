@@ -1,4 +1,4 @@
-<?php
+<?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 
 /* *****************************************************************************
  * Pwdstore Secrets File Secret class
@@ -105,8 +105,11 @@
     * Construct a new PwdstoreSecret from an prepared values array.
     * @param array $data
     */
-    private function __construct(array $data)
+    public function __construct($data = null)
     {
+        if ($data == null)
+            return;
+        
         $this->id = $data["id"];
         $this->userId = $data["userId"];
         $this->category = $data["category"];
@@ -131,7 +134,7 @@
      * @param resource $f The file to write to
      * @throws InvalisArgumentException
      */
-    public function write($f)
+    public function toFile($f)
     {
         if (!is_resource($f))
             throw new InvalidArgumentException("Illegal value '"
@@ -152,6 +155,44 @@
         fwrite($f, $this->description, $this->description_length);
         fwrite($f, $this->secret, $this->secret_length);
         fwrite($f, $this->comment, $this->comment_length);
+    }
+    
+    public function toStdout()
+    {
+        echo pack("N", $this->id);
+        echo pack("N", $this->userId);
+        echo pack("N", $this->category);
+        echo pack("N", $this->date);
+        
+        echo pack("N", $this->tags_length);
+        echo pack("N", $this->description_length);
+        echo pack("N", $this->secret_length);
+        echo pack("N", $this->comment_length);
+        
+        echo substr($this->tags, 0, $this->tags_length);
+        echo substr($this->description, 0, $this->description_length);
+        echo substr($this->secret, 0, $this->secret_length);
+        echo substr($this->comment, 0, $this->comment_length);
+    }
+    
+    public function toString()
+    {
+        $res = pack("N", $this->id);
+        $res .= pack("N", $this->userId);
+        $res .= pack("N", $this->category);
+        $res .= pack("N", $this->date);
+        
+        $res .= pack("N", $this->tags_length);
+        $res .= pack("N", $this->description_length);
+        $res .= pack("N", $this->secret_length);
+        $res .= pack("N", $this->comment_length);
+        
+        $res .= substr($this->tags, 0, $this->tags_length);
+        $res .= substr($this->description, 0, $this->description_length);
+        $res .= substr($this->secret, 0, $this->secret_length);
+        $res .= substr($this->comment, 0, $this->comment_length);
+        
+        return $res;
     }
 
 }

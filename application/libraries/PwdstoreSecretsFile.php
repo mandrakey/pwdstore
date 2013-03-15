@@ -1,4 +1,4 @@
-<?php
+<?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 
 /* *****************************************************************************
  * Pwdstore Secrets File access library
@@ -76,7 +76,7 @@
         return $psfFile;
     }
     
-    private function __construct()
+    public function __construct()
     {
         $this->_DUMMY = null;
         $this->version = null;
@@ -98,7 +98,7 @@
         $this->secretsCount++;
     }
     
-    public function write($file)
+    public function toFile($file)
     {
         if (!is_string($file) || trim($file) === "")
             throw new InvalidArgumentException("Illegal value "
@@ -118,10 +118,34 @@
         fwrite($f, pack("n", $this->encrypted), 2);
         
         for ($i = 0; $i < $this->secretsCount; ++$i) {
-            $this->secrets[$i]->write($f);
+            $this->secrets[$i]->toFile($f);
         }
         
         fclose($f);
+    }
+    
+    public function toStdout()
+    {
+        echo "PWDSTORE";
+        echo sprintf("%8s", $this->version);
+        echo pack("N", $this->secretsCount);
+        echo pack("n", $this->encrypted);
+        
+        for ($i = 0; $i < $this->secretsCount; ++$i)
+            $this->secrets[$i]->toStdout();
+    }
+    
+    public function toString()
+    {
+        $res = "PWDSTORE";
+        $res .= sprintf("%8s", $this->version);
+        $res .= pack("N", $this->secretsCount);
+        $res .= pack("n", $this->encrypted);
+        
+        for ($i = 0; $i < $this->secretsCount; ++$i)
+            $res .= $this->secrets[$i]->toString();
+        
+        return $res;
     }
     
     //==========================================================================

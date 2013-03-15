@@ -5,14 +5,14 @@
  * 
  * =============================================================================
  * 
- * THIS FILE IS PART OF BLEUELMEDIA PWDSTORE
- * (C)2012 bleuelmedia.com
+ * Copyright (C) 2013 Maurice Bleuel
+ * THIS FILE IS PART OF PWDSTORE
  * 
- * This program is free software; you can redistribute it and/or modify it under
+ * PWDSTORE is free software; you can redistribute it and/or modify it under
  * the terms of the GNU General Public License version 3 as published by the
  * Free Software Foundation.
  * 
- * This program is distributed in the hope that it will be useful, but WITHOUT
+ * PWDSTORE is distributed in the hope that it will be useful, but WITHOUT
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more
  * details.
@@ -43,6 +43,9 @@ class Secrets extends CI_Controller
         $this->tpl->js("secrets");
         $this->lang->load("common");
         $this->lang->load("secrets");
+        
+        $this->load->library("PwdstoreSecret");
+        $this->load->library("PwdstoreSecretsFile");
     }
     
     public function index()
@@ -347,10 +350,47 @@ class Secrets extends CI_Controller
         // Create CSV
         if ($type == "csv")
             $data = $this->export_csv($entries);
+        else
+            $data = $this->export_binary($entries);
         
         foreach ($data["headers"] as $header)
             header($header);
         echo $data["content"];
+    }
+    
+    /**
+     * Create file content for binary export.
+     * @param array $entries
+     * @retval array [headers, content]
+     */
+    private function export_binary($entries)
+    {
+        $psfFile = PwdstoreSecretsFile::create("1.0", 1);
+        foreach ($entries as $entry) {
+            $psfFile->addSecret(PwdstoreSecret::fromArray(array(
+                "id" => intval($entry["id"]),
+                "userId" => intval($entry["user_id"]),
+                "category" => intval($entry["category"]),
+                "date" => date("U", strtotime($entry["date"])),
+                "tags_length" => strlen($entry["tags"]),
+                "description_length" => strlen($entry["description"]),
+                "secret_length" => strlen($entry["secret"]),
+                "comment_length" => strlen($entry["comment"]),
+                "tags" => $entry["tags"],
+                "description" => $entry["description"],
+                "secret" => $entry["secret"],
+                "comment" => $entry["comment"]
+            )));
+        }
+        
+        return array(
+            "headers" => array(
+                "Content-type: application/octet-stream",
+                "Content-Disposition: attachment; filename=secrets.pwdstore",
+                "Pragma: no-cache",
+                "Expires: 0"
+            ), 
+            "content" => $psfFile->toString());
     }
     
     /**
