@@ -157,6 +157,9 @@
         fwrite($f, $this->comment, $this->comment_length);
     }
     
+    /**
+     * Print contents of this secret to standard output (echo).
+     */
     public function toStdout()
     {
         echo pack("N", $this->id);
@@ -175,6 +178,10 @@
         echo substr($this->comment, 0, $this->comment_length);
     }
     
+    /**
+     * Return contents of this secret as binary string.
+     * @return string
+     */
     public function toString()
     {
         $res = pack("N", $this->id);

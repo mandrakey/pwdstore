@@ -365,8 +365,9 @@ class Secrets extends CI_Controller
      */
     private function export_binary($entries)
     {
-        $psfFile = PwdstoreSecretsFile::create("1.0", 1);
+        $psfFile = PwdstoreSecretsFile::create("1.0", 0);
         foreach ($entries as $entry) {
+            $secret = decryptSecret($entry["secret"]);
             $psfFile->addSecret(PwdstoreSecret::fromArray(array(
                 "id" => intval($entry["id"]),
                 "userId" => intval($entry["user_id"]),
@@ -374,11 +375,11 @@ class Secrets extends CI_Controller
                 "date" => date("U", strtotime($entry["date"])),
                 "tags_length" => strlen($entry["tags"]),
                 "description_length" => strlen($entry["description"]),
-                "secret_length" => strlen($entry["secret"]),
+                "secret_length" => strlen($secret),
                 "comment_length" => strlen($entry["comment"]),
                 "tags" => $entry["tags"],
                 "description" => $entry["description"],
-                "secret" => $entry["secret"],
+                "secret" => $secret,
                 "comment" => $entry["comment"]
             )));
         }

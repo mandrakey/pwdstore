@@ -58,26 +58,43 @@
                 ."the access rights");
         
         // Create object
-        $psfFile = new PwdstoreSecretsFile();
+        $psfFile = new PwdstoreSecretsFile(1);
         $psfFile->file = $file;
         $psfFile->read();
         return $psfFile;
     }
     
+    /**
+     * Create an empty PwdstoreSecretsFile object to be filled for later output.
+     * @param string $version File format version
+     * @param int $encrypted If 1, the "contains encrypted entries" flag inside 
+     * output file/text will be set to 1.
+     * @return PwdstoreSecretsFile
+     */
     public static function create($version, $encrypted = 0)
     {
         if (!is_string($version) || trim($version) == "")
             throw new InvalidArgumentExcpetion("Illegal value '"
                 .var_export($version, true)."' for argument 'version'");
         
-        $psfFile = new PwdstoreSecretsFile();
+        $psfFile = new PwdstoreSecretsFile(1);
         $psfFile->version = $version;
         $psfFile->encrypted = $encrypted;
         return $psfFile;
     }
     
-    public function __construct()
+    /**
+     * Construct an empty PwdstoreSecretsFile.
+     * Should not be called directly.
+     * @param int $indirectCall If this is null, the constructor was called by 
+     * CodeIgniter autoloader and shall do nothing. When constructing an 
+     * object, give it any value other than "null".
+     */
+    public function __construct($indirectCall = null)
     {
+        if ($indirectCall == null)
+            return;
+        
         $this->_DUMMY = null;
         $this->version = null;
         $this->secretsCount = 0;
@@ -88,6 +105,11 @@
     //==========================================================================
     // PUBLIC INTERFACE
     
+    /**
+     * Add a new secret to the secrets list and increase secretsCount.
+     * @param PwdstoreSecret $secret The secret to add to the list
+     * @throws InvalidArgumentException
+     */
     public function addSecret($secret)
     {
         if (!is_object($secret))
@@ -98,6 +120,11 @@
         $this->secretsCount++;
     }
     
+    /**
+     * Print contents of this secret file to a writable file resource.
+     * @param resource $f The file to write to
+     * @throws InvalisArgumentException, RuntimeException
+     */
     public function toFile($file)
     {
         if (!is_string($file) || trim($file) === "")
@@ -124,6 +151,9 @@
         fclose($f);
     }
     
+    /**
+     * Print contents of this secret to standard output (echo).
+     */
     public function toStdout()
     {
         echo "PWDSTORE";
@@ -135,6 +165,10 @@
             $this->secrets[$i]->toStdout();
     }
     
+    /**
+     * Return contents of this secret as binary string.
+     * @return string
+     */
     public function toString()
     {
         $res = "PWDSTORE";
