@@ -41,6 +41,7 @@ written binary, ordered top to bottom:
 | _DUMMY_ | A dummy field indicating a 'pwdstore secrets file', only contains the text "PWDSTORE" | 8 bytes
 | Version | Version of the PWDSTORE instance that created the file | 8 bytes
 | # secrets | Contains the count of secrets within the file | 3 bytes
+| encrypted | Bool value telling if the secrets are encrypted or not | 1 byte
 |====
 
 == File content
