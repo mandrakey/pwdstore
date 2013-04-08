@@ -30,7 +30,7 @@
 <div>
     <?=lang("common_FilterList")?>: 
     <input type="text"
-           onkeyup="filterHtmlTable(event, this, [0,1])"
+           onkeyup="filterHtmlTable(event, this, [1,2])"
            ref="secretsList"
            id="secretsListFilter"> 
     <img src="<?=base_url()?>/tpl/img/edit-clear.png" alt="<?=lang("common_Clear")?>"
