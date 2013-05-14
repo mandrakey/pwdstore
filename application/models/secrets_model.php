@@ -125,6 +125,31 @@ class Secrets_model extends CI_Model
         return $res->row_array();
     }
     
+    public function getAllDetails($userId, $secrets = null)
+    {
+        if (!isset($userId) || !is_numeric($userId))
+            throw new Exception("Secrets_model.getAllDetails: Illegal value '"
+                .var_export($userId, true)."' for field 'secretId'.");
+                
+        if ($secrets != null && !is_array($secrets))
+            throw new Exception("Secrets_model.getAllDetails: Illegal value '"
+                .var_export($secrets, true)."' for field 'secrets'.");
+        
+        $this->db->select("secrets.*, categories.name AS category_name");
+        $this->db->join("categories", "secrets.category = categories.id");
+        $this->db->where("user_id", intval($userId));
+        $res = $this->db->get("secrets");
+        
+        if (!$res || $res->num_rows() == 0)
+            return array();
+        
+        $secrets = array();
+        while ($secret = $res->row_array())
+            $secrets[] = $secret;
+        
+        return $secrets;
+    }
+    
     /**
      * Fetch details for all secrets with an id in idList.
      * @param array $idList List of numeric ID's
