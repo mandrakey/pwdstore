@@ -25,6 +25,7 @@
 
 $lang["secrets_Secrets"] = "Geheimdaten";
 $lang["secrets_ViewSecretEntry"] = "Eintrag ansehen";
+$lang["secrets_ViewSecretEntries"] = "Einträge ansehen";
 $lang["secrets_EditSecretEntry"] = "Eintrag bearbeiten";
 $lang["secrets_CreateSecretEntry"] = "Neuen Eintrag erstellen";
 $lang["secrets_SecretUpdated_Title"] = "Erfolgreich aktualisiert";

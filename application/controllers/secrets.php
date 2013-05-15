@@ -69,27 +69,33 @@ class Secrets extends CI_Controller
     }
     
     /**
-     * Display all details about one secret.
-     * @param int $secretId
+     * Display all details about one or more secrets.
      */
-    public function view($secretId)
+    public function view()
     {
+        $secretIdList = $this->uri->segment_array();
+        array_shift($secretIdList);
+        array_shift($secretIdList);
+        
         //----
         // Check secret id
-        if (!isset($secretId) || !is_numeric($secretId)) {
+        if (!isset($secretIdList)) {
             $this->tpl->set("title", lang("error_ParameterError"));
             $this->tpl->set("message", plang("error_IllegalValueForField", 
-                array("field" => "secretId", "value" => $secretId)));
+                array("field" => "secretIdList", "value" => $secretIdList)));
             $this->tpl->display("error/error");
             return;
         }
+                
+        if (!is_array($secretIdList))
+            $secretIdList = explode(",", $secretIdList);
         
         //----
         // Load data
         try {
             $this->load->model("secrets_model");
-            $secret = $this->secrets_model->getDetails($secretId);
-            $this->tpl->set("secret", $secret);
+            $secrets = $this->secrets_model->getDetailsIdIn($secretIdList);
+            $this->tpl->set("secrets", $secrets);
         } catch (Exception $e) {
             $this->tpl->set("title", lang("error_FailedToLoadData"));
             $this->tpl->set("message", $e->getMessage());

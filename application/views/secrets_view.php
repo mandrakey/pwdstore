@@ -23,14 +23,19 @@
  * ****************************************************************************/
 ?>
 
-<?php $even = true; ?>
+<?php $even = true; $i = 0; ?>
 
 <div class="form">
 <div class="header">
+    <? if (count($secrets) == 1): ?>
     <?=lang("secrets_ViewSecretEntry")?>
+    <? else: ?>
+    <?=lang("secrets_ViewSecretEntries")?>
+    <? endif; ?>
 </div>
 <div class="body">
-    <table style="width: 100%;">
+    <table style="width: 100%; border-collapse: collapse;">
+    <? foreach($secrets as $secret): ?>
     <tr>
         <td><?=lang("secrets_Category")?>:</td>
         <td><?=$secret["category_name"]?></td>
@@ -47,11 +52,22 @@
         <td><?=lang("secrets_Comment")?>:</td>
         <td><?=$secret["comment"]?></td>
     </tr>
+    <? if ($i < count($secrets) - 1): ?>
+    <tr>
+        <td colspan="2"><hr></td>
+    </tr>
+    <? else: ?>
     <tr>
         <td>&nbsp;</td>
         <td>
-            <input type="button" value="Zurück" onclick="document.location.href='<?=site_url("secrets")?>';">
+            <input 
+                type="button" 
+                value="<?=lang("common_Back")?>" 
+                onclick="document.location.href='<?=site_url("secrets")?>';">
         </td>
     </tr>
+    <? endif; ?>
+    <? $i++; ?>
+    <? endforeach; ?>
     </table>
 </div></div>

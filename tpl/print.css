@@ -28,3 +28,7 @@
 input {
     display: none;
 }
+
+.noprint {
+    display: none ! important;
+}

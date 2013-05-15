@@ -25,6 +25,7 @@
 
 $lang["secrets_Secrets"] = "Secrets";
 $lang["secrets_ViewSecretEntry"] = "View secret entry";
+$lang["secrets_ViewSecretEntries"] = "View secret entries";
 $lang["secrets_EditSecretEntry"] = "Edit secret entry";
 $lang["secrets_CreateSecretEntry"] = "Create secret entry";
 $lang["secrets_SecretUpdated_Title"] = "Update successful.";
