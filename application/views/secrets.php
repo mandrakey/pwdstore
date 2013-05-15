@@ -41,8 +41,9 @@
 
 <div id="secretsList_export">
     Gewählte Einträge exportieren als: 
-    <a href="javascript:void(0);" onclick="secretsList_startExport('csv');">CSV</a> | 
-    <a href="javascript:void(0);" onclick="secretsList_startExport('binary');">Binärdaten</a>
+    <a href="javascript:void(0);" onclick="secretsList_startExport('csv');"><?=lang("secrets_exportCsv")?></a> | 
+    <a href="javascript:void(0);" onclick="secretsList_startExport('binary');"><?=lang("secrets_exportBinary")?></a> | 
+    <a href="javascript:void(0);" onclick="secretsList_displayPrintList();"><?=lang("secrets_exportPrintList")?></a>
 </div>
 
 <table class="list" id="secretsList">

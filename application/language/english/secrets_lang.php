@@ -37,6 +37,9 @@ $lang["secrets_SecretCreated_Message"] = "The new secret record has been created
 $lang["secrets_SeparatedWithCommas"] = "Separated with commas";
 $lang["secrets_TagsPLACEHOLDER"] = "tag1,tag2,tag3 ...";
 $lang["secrets_CreateAnotherSecret"] = "Create another secret";
+$lang["secrets_exportCsv"] = "CSV";
+$lang["secrets_exportBinary"] = "Binary data";
+$lang["secrets_exportPrintList"] = "Print list";
 
 $lang["secrets_ReallyDeleteSecret"] = "Shall the secret #{secretId} ({description}), category \"{category}\", really be deleted?";
 

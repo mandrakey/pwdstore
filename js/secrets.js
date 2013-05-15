@@ -136,6 +136,12 @@ function secretsList_displayExportBox()
         $('#secretsList_export').hide();
 }
 
+/**
+ * Start export by relocating the user.
+ * @param string type Type of export. Can be one of
+ * - csv
+ * - binary
+ */
 function secretsList_startExport(type)
 {
     if (typeof(type) == "undefined" || type == null)
@@ -151,6 +157,26 @@ function secretsList_startExport(type)
     $("input[ref=export][name=type]")[0].value = type;
     $("input[ref=export][name=secrets]")[0].value = entryList.join(",");
     $("form[name=secretsExportForm]")[0].submit();
+}
+
+/**
+ * Display a list of all selected secret entries.
+ * Creates entrylist as URI and redirects the user to /secrets/view/1/2 ...
+ */
+function secretsList_displayPrintList()
+{
+    var entryList = [];
+    $("input[name^=export_]").each(function(nr, obj)
+    {
+        if (obj.checked)
+            entryList.push($(obj).attr("ref"));
+    });
+    
+    var url = "./secrets/view";
+    var i = 0;
+    for (i = 0; i < entryList.length; i++)
+        url += "/" + entryList[i]
+    document.location.href = url;
 }
 
 //==============================================================================
