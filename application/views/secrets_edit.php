@@ -39,7 +39,7 @@
             <select name="category">
                 <? foreach ($categories as $category): ?>
                 <option 
-                    value="<?=$category["id"].(($category["id"] == $secret["category"]) ? " selected" : "")?>">
+                    value="<?=$category["id"]?>"<? if ($category["id"] == $secret["category"]): ?> selected="selected"<? endif; ?>>
                     <?=$category["name"]?></option>
                 <? endforeach; ?>
             </select></td>
