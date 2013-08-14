@@ -213,11 +213,14 @@ class Secrets extends CI_Controller
      */
     public function doEdit()
     {
+        $user = $this->auth->getCurrentUser();
+        
         //----
         // Get data from post
         $secretId = $this->input->post("secretId");
         $secret = array(
             "id" => $secretId,
+            "user_id" => $user["id"],
             "category" => $this->input->post("category"),
             "description" => $this->input->post("description"),
             "tags" => $this->input->post("tags"),
@@ -239,9 +242,9 @@ class Secrets extends CI_Controller
         //----
         // Save data
         try {
-            $this->this->load->model("secrets_model");
+            $this->load->model("secrets_model");
             ModelHelper::checkNecessaryFields($secret, $this->secrets_model->necessaryFields(), $this->secrets_model->fields());
-            $this->this->secrets_model->update(intval($secretId), $secret);
+            $this->secrets_model->update(intval($secretId), $secret);
         } catch (Exception $e) {
             $this->tpl->set("title", lang("error_DataUpdateFailed"));
             $this->tpl->set("message", $e->getMessage());
